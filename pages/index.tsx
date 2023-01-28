@@ -23,6 +23,7 @@ export default function Home() {
     if (map.current) return // initialize map only once
 
     map.current = new mapboxgl.Map({
+      projection: 'mercator',
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/satellite-streets-v12',
       center: [-77.3513761, 39.75704], // TODO determine default
