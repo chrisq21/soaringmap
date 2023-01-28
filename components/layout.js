@@ -13,7 +13,7 @@ export default function Layout({children}) {
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
-      <header>
+      <header className={styles.header}>
         <span>Soaring POI</span>
       </header>
       <main className={styles.main}>{children}</main>

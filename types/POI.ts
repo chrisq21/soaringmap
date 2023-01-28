@@ -1,4 +1,4 @@
-export enum POI_TYPE {
+export enum POI_CATEGORY {
   AIRPORT = 'airport',
   GLIDER_OPERATION = 'glider_operation',
   RIDGE = 'ridge',
@@ -11,30 +11,30 @@ export type POI = {
   longitude: number
   title: string
   description: string
-  type: POI_TYPE
+  category: POI_CATEGORY
 }
 
 export type AIRPORT_AIRFIELD_POI = POI & {
-  type: POI_TYPE.AIRPORT
+  category: POI_CATEGORY.AIRPORT
   airportAirfieldType: 'airport' | 'airfield'
   identifier: string
   elevation: number // in feet MSL?
 }
 
 export type GLIDER_OPERATION_POI = POI & {
-  type: POI_TYPE.GLIDER_OPERATION
+  category: POI_CATEGORY.GLIDER_OPERATION
   operationType: 'commerical' | 'club'
   // airportAirfield: AIRPORT_AIRFIELD_POI
 }
 
 export type RIDGE_POI = POI & {
-  type: POI_TYPE.RIDGE
+  category: POI_CATEGORY.RIDGE
 }
 
 export type MOUNTAIN_PEAK_POI = POI & {
-  type: POI_TYPE.MOUNTAIN_PEAK
+  category: POI_CATEGORY.MOUNTAIN_PEAK
 }
 
 export type CALLOUT_POI = POI & {
-  type: POI_TYPE.CALLOUT
+  category: POI_CATEGORY.CALLOUT
 }

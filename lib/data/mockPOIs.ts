@@ -1,4 +1,4 @@
-import {GLIDER_OPERATION_POI, POI, POI_TYPE, RIDGE_POI} from '../../types/POI'
+import {GLIDER_OPERATION_POI, POI, POI_CATEGORY, RIDGE_POI} from '../../types/POI'
 
 /* Glider Operations */
 const masaGliderport: GLIDER_OPERATION_POI = {
@@ -7,7 +7,7 @@ const masaGliderport: GLIDER_OPERATION_POI = {
   title: 'Mid-Atlantic Soaring Association',
   description: 'description',
   operationType: 'club',
-  type: POI_TYPE.GLIDER_OPERATION,
+  category: POI_CATEGORY.GLIDER_OPERATION,
 }
 
 const skylineSoaringClub: GLIDER_OPERATION_POI = {
@@ -16,7 +16,7 @@ const skylineSoaringClub: GLIDER_OPERATION_POI = {
   title: 'Skyline Soaring Club, Inc',
   description: 'description',
   operationType: 'club',
-  type: POI_TYPE.GLIDER_OPERATION,
+  category: POI_CATEGORY.GLIDER_OPERATION,
 }
 
 /* Ridges */
@@ -25,7 +25,7 @@ const tuscarora: RIDGE_POI = {
   longitude: -77.361345,
   title: 'Tuscarora Ridge',
   description: 'description',
-  type: POI_TYPE.RIDGE,
+  category: POI_CATEGORY.RIDGE,
 }
 
 const mcConnellsburg: RIDGE_POI = {
@@ -33,7 +33,7 @@ const mcConnellsburg: RIDGE_POI = {
   longitude: -77.8939,
   title: 'McConnellsburg Ridge',
   description: 'description',
-  type: POI_TYPE.RIDGE,
+  category: POI_CATEGORY.RIDGE,
 }
 
 const dickeys: RIDGE_POI = {
@@ -41,11 +41,11 @@ const dickeys: RIDGE_POI = {
   longitude: -78.053903,
   title: 'Dickeys Ridge',
   description: 'description',
-  type: POI_TYPE.RIDGE,
+  category: POI_CATEGORY.RIDGE,
 }
 
-export const ridgePOIs = [tuscarora, mcConnellsburg, dickeys]
+export const mockRidgePOIs = [tuscarora, mcConnellsburg, dickeys]
 
 export const mockGliderOperations = [masaGliderport, skylineSoaringClub]
 
-export const mockPOIs: POI[] = [...mockGliderOperations, ...ridgePOIs]
+export const mockPOIs: POI[] = [...mockGliderOperations, ...mockRidgePOIs]

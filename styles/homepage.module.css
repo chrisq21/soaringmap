@@ -7,10 +7,31 @@
 .sidebar {
   width: 400px;
   height: 100%;
+  padding: 24px;
 }
 
 .mapContainer {
   flex: 1;
   height: 100%;
   width: 100%;
+}
+
+
+/* Sidebar */
+.category {
+  font-weight: bold;
+  color: gray;
+  display: block;
+  margin-top: 30px;
+
+}
+
+.poiTitle {
+  all: unset;
+  cursor: pointer;
+  font-weight: bold;
+  color: blue;
+  display: block;
+
+  margin: 10px 0;
 }
