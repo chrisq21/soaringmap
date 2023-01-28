@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  border: 1px solid red;
+  height: 100%;
+  width: 100%;
+}
+
+.sidebar {
+  width: 400px;
+  height: 100%;
+}
+
+.mapContainer {
+  flex: 1;
+  height: 100%;
+  width: 100%;
+}
