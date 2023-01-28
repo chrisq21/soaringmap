@@ -3,7 +3,7 @@ import Layout, {siteTitle} from '../components/layout'
 import styles from '../styles/homepage.module.css'
 import {getSortedPostsData} from '../lib/posts'
 import {useEffect, useRef, useState} from 'react'
-import {mockGliderOperations, mockRidgePOIs} from '../lib/data/mockPOIs'
+import {mockGliderOperations, mockPOIs, mockRidgePOIs} from '../lib/data/mockPOIs'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
@@ -33,6 +33,7 @@ export default function Home() {
       map.current.addSource('mapbox-dem', {
         type: 'raster-dem',
         url: 'mapbox://mapbox.mapbox-terrain-dem-v1',
+        // TODO research for performance
         tileSize: 512,
         maxzoom: 14,
       })
@@ -41,20 +42,67 @@ export default function Home() {
         source: 'mapbox-dem',
         exaggeration: 2,
       })
+
+      /* Add map markers for POIs */
+      const poiFeatures = mockPOIs.map(({latitude, longitude, description, category}) => ({
+        type: 'Feature',
+        properties: {
+          description,
+          icon: category === POI_CATEGORY.RIDGE ? 'rocket' : 'theatre',
+          poiData: {
+            latitude,
+            longitude,
+            description,
+            category,
+          },
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [longitude, latitude],
+        },
+      }))
+
+      // Add features as sources
+      map.current.addSource('POIs', {
+        type: 'geojson',
+        data: {
+          type: 'FeatureCollection',
+          features: poiFeatures,
+        },
+      })
+
+      // Add a layer showing the POIs.
+      map.current.addLayer({
+        id: 'POIs',
+        type: 'symbol',
+        source: 'POIs',
+        layout: {
+          'icon-image': ['get', 'icon'],
+          'icon-allow-overlap': false,
+          'icon-size': 2,
+        },
+      })
+
+      map.current.on('click', 'POIs', (e) => {
+        // Copy coordinates array.
+        const poiData = JSON.parse(e.features[0].properties.poiData)
+        flyToPOI(poiData)
+      })
     })
   })
 
-  const handlePOISelected = ({latitude, longitude}: POI) => {
+  const flyToPOI = ({latitude, longitude, category}: POI) => {
     if (!map) return
-    map.current.flyTo({
+
+    let flyData = {
       center: [longitude, latitude],
-      zoom: 9,
-      speed: 0.8,
-      curve: 1,
-      easing(t) {
-        return t
-      },
-    })
+    }
+    if (category === POI_CATEGORY.RIDGE) {
+      flyData = {...flyData, zoom: 11, curve: 1, pitch: 70}
+    } else {
+      flyData = {...flyData, zoom: 15, curve: 1, pitch: 0}
+    }
+    map.current.flyTo(flyData)
   }
 
   return (
@@ -68,7 +116,7 @@ export default function Home() {
           <div>
             <span className={styles.category}>Glider Operation</span>
             {mockGliderOperations.map((poi, index) => (
-              <button key={index} className={styles.poiTitle} onClick={() => handlePOISelected(poi)}>
+              <button key={index} className={styles.poiTitle} onClick={() => flyToPOI(poi)}>
                 {poi.title}
               </button>
             ))}
@@ -76,7 +124,7 @@ export default function Home() {
           <div>
             <span className={styles.category}>Ridges</span>
             {mockRidgePOIs.map((poi, index) => (
-              <button key={index} className={styles.poiTitle} onClick={() => handlePOISelected(poi)}>
+              <button key={index} className={styles.poiTitle} onClick={() => flyToPOI(poi)}>
                 {poi.title}
               </button>
             ))}
