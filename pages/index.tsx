@@ -70,7 +70,7 @@ export default function Home() {
               color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // random color
             },
             geometry: {
-              type: 'LineString',
+              type: 'Polygon',
               coordinates,
             },
           }
@@ -122,8 +122,8 @@ export default function Home() {
         },
         paint: {
           'line-color': ['get', 'color'],
-          'line-width': 7,
-          'line-opacity': 0.7,
+          'line-width': 3,
+          'line-opacity': 0.5,
         },
       })
       // Add ridges layer (polygon)
@@ -134,7 +134,7 @@ export default function Home() {
         layout: {},
         paint: {
           'fill-color': '#0080ff', // blue color fill
-          'fill-opacity': 0.5,
+          'fill-opacity': 0.1,
         },
       })
 

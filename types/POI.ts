@@ -10,7 +10,7 @@ export type POI = {
   title: string
   description: string
   category: POI_CATEGORY
-  coordinates?: Array<Array<number>> | Array<number>
+  coordinates?: Array<Array<Array<number>>> | Array<Array<number>> | Array<number>
 }
 
 export type AIRPORT_AIRFIELD_POI = POI & {
