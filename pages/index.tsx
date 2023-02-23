@@ -46,7 +46,7 @@ export default function Home() {
         exaggeration: 2.5,
       })
 
-      /* Add map markers for POIs */
+      /* Add map source data for POIs */
       const poiFeatures = mockPOIs.map(({description, category, coordinates}) => {
         let geometryData = {}
 
@@ -97,6 +97,9 @@ export default function Home() {
           type: 'FeatureCollection',
           features: poiFeatures,
         },
+        cluster: true,
+        clusterMaxZoom: 14, // Max zoom to cluster points on
+        clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
       })
 
       // Add gliderport layer
