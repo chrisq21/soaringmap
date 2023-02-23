@@ -7,11 +7,10 @@ export enum POI_CATEGORY {
 }
 
 export type POI = {
-  latitude: number
-  longitude: number
   title: string
   description: string
   category: POI_CATEGORY
+  coordinates?: Array<Array<number>> | Array<number>
 }
 
 export type AIRPORT_AIRFIELD_POI = POI & {
@@ -23,7 +22,7 @@ export type AIRPORT_AIRFIELD_POI = POI & {
 
 export type GLIDER_OPERATION_POI = POI & {
   category: POI_CATEGORY.GLIDER_OPERATION
-  operationType: 'commerical' | 'club'
+  operationType: 'commercial' | 'club'
   // airportAirfield: AIRPORT_AIRFIELD_POI
 }
 

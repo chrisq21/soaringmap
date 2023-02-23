@@ -3,7 +3,9 @@ import Layout, {siteTitle} from '../components/layout'
 import styles from '../styles/homepage.module.css'
 import {getSortedPostsData} from '../lib/posts'
 import {useEffect, useRef, useState} from 'react'
-import {mockGliderOperations, mockPOIs, mockRidgePOIs} from '../lib/data/mockPOIs'
+import {mockPOIs} from '../lib/data/mockPOIs'
+import mockGliderOperations from '../lib/data/gliderports'
+import mockRidgePOIs from '../lib/data/ridges'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
@@ -25,7 +27,7 @@ export default function Home() {
     map.current = new mapboxgl.Map({
       projection: 'mercator',
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/satellite-streets-v12',
+      style: 'mapbox://styles/mapbox/outdoors-v9',
       center: [-77.3513761, 39.75704], // TODO determine default
       zoom: zoom,
     })
@@ -41,30 +43,55 @@ export default function Home() {
 
       map.current.setTerrain({
         source: 'mapbox-dem',
-        exaggeration: 2,
+        exaggeration: 2.5,
       })
 
       /* Add map markers for POIs */
-      const poiFeatures = mockPOIs.map(({latitude, longitude, description, category}) => ({
-        type: 'Feature',
-        properties: {
-          description,
-          icon: category === POI_CATEGORY.RIDGE ? 'rocket' : 'theatre',
-          poiData: {
-            latitude,
-            longitude,
+      const poiFeatures = mockPOIs.map(({description, category, coordinates}) => {
+        let geometryData = {}
+
+        const featureData = {
+          type: 'Feature',
+          properties: {
             description,
-            category,
+            icon: category === POI_CATEGORY.MOUNTAIN_PEAK ? 'range' : 'airfield',
+            poiData: {
+              coordinates,
+              description,
+              category,
+            },
           },
-        },
-        geometry: {
-          type: 'Point',
-          coordinates: [longitude, latitude],
-        },
-      }))
+        }
+
+        if (category === POI_CATEGORY.RIDGE) {
+          // ridge geometry
+          geometryData = {
+            properties: {
+              color: `#${Math.floor(Math.random() * 16777215).toString(16)}`, // random color
+            },
+            geometry: {
+              type: 'LineString',
+              coordinates,
+            },
+          }
+        } else {
+          // gliderport geometry
+          geometryData = {
+            geometry: {
+              type: 'Point',
+              coordinates,
+            },
+          }
+        }
+
+        return {
+          ...featureData,
+          ...geometryData,
+        }
+      })
 
       // Add features as sources
-      map.current.addSource('POIs', {
+      map.current.addSource('glider-pois', {
         type: 'geojson',
         data: {
           type: 'FeatureCollection',
@@ -72,37 +99,66 @@ export default function Home() {
         },
       })
 
-      // Add a layer showing the POIs.
+      // Add gliderport layer
       map.current.addLayer({
-        id: 'POIs',
-        type: 'symbol',
-        source: 'POIs',
+        id: 'POI_icons',
+        type: 'circle',
+        source: 'glider-pois',
+        paint: {
+          'circle-radius': 6,
+          'circle-color': '#B42222',
+        },
+        filter: ['==', '$type', 'Point'],
+      })
+
+      // Add ridges layer (line outline)
+      map.current.addLayer({
+        id: 'ridges_outline',
+        type: 'line',
+        source: 'glider-pois',
         layout: {
-          'icon-image': ['get', 'icon'],
-          'icon-allow-overlap': false,
-          'icon-size': 2,
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': 7,
+          'line-opacity': 0.7,
+        },
+      })
+      // Add ridges layer (polygon)
+      map.current.addLayer({
+        id: 'ridges_polygon',
+        type: 'fill',
+        source: 'glider-pois',
+        layout: {},
+        paint: {
+          'fill-color': '#0080ff', // blue color fill
+          'fill-opacity': 0.5,
         },
       })
 
-      map.current.on('click', 'POIs', (e) => {
-        // Copy coordinates array.
+      map.current.on('click', 'POI_icons', (e) => {
+        console.log('click!')
+        const poiData = JSON.parse(e.features[0].properties.poiData)
+        flyToPOI(poiData)
+      })
+      map.current.on('click', 'POI_lines', (e) => {
+        console.log('click!')
         const poiData = JSON.parse(e.features[0].properties.poiData)
         flyToPOI(poiData)
       })
     })
   })
 
-  const flyToPOI = ({latitude, longitude, category}: POI) => {
+  const flyToPOI = ({coordinates, category}: POI) => {
     if (!map) return
 
     let flyData = {
-      center: [longitude, latitude],
+      center: category === POI_CATEGORY.RIDGE ? coordinates[0] : coordinates,
     }
-    if (category === POI_CATEGORY.RIDGE) {
-      flyData = {...flyData, zoom: 11, curve: 1, pitch: 70}
-    } else {
-      flyData = {...flyData, zoom: 15, curve: 1, pitch: 0}
-    }
+
+    flyData = {...flyData, zoom: 10, curve: 1, pitch: 0}
     map.current.flyTo(flyData)
   }
 
