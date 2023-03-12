@@ -39,7 +39,7 @@ export const addGliderOperationSource = (map, features) => {
     },
     cluster: true,
     clusterMaxZoom: 14, // Max zoom to cluster points on
-    clusterRadius: 50, // Radius of each cluster when clustering points (defaults to 50)
+    clusterRadius: 30, // Radius of each cluster when clustering points (defaults to 50)
   })
   return map
 }
@@ -65,21 +65,33 @@ export const addGliderOperationMarkers = (map, features, markerStyles) => {
     source: 'glider-pois',
     filter: ['!', ['has', 'point_count']],
     paint: {
-      'circle-color': '#FFA500',
-      'circle-radius': 10,
+      'circle-color': '#355C7D',
+      'circle-radius': 15,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-opacity': 1,
     },
   })
-  // add markers to map
-  // TODO filter out cluster
-  // for (const feature of features) {
-  //   // create a HTML element for each feature
-  //   const el = document.createElement('div')
-  //   el.innerHTML = 5
-  //   el.className = markerStyles
-  //   el.id = 'gliderport-points'
-  //   // make a marker for each feature and add to the map
-  //   new mapboxgl.Marker(el).setLngLat(feature.geometry.coordinates).addTo(map)
-  // }
+
+  map.loadImage('./images/white-glider.png', (error, image) => {
+    if (error) {
+      console.error(error)
+      return
+    }
+
+    map.addImage('glider-icon', image)
+
+    map.addLayer({
+      id: 'points',
+      type: 'symbol',
+      source: 'glider-pois',
+      filter: ['!', ['has', 'point_count']],
+      layout: {
+        'icon-image': 'glider-icon', // reference the image
+        'icon-size': 0.08,
+      },
+    })
+  })
 }
 
 /* Cluster setup  */
@@ -93,8 +105,12 @@ export const addClusterLayer = (map) => {
     filter: ['has', 'point_count'],
     paint: {
       // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
-      'circle-color': '#FFA500',
-      'circle-radius': ['step', ['get', 'point_count'], 17, 2, 20, 3, 23],
+      'circle-color': '#355C7D',
+      // 'circle-radius': ['step', ['get', 'point_count'], 17, 2, 20, 3, 23],
+      'circle-radius': 15,
+      'circle-stroke-width': 2,
+      'circle-stroke-color': '#ffffff',
+      'circle-stroke-opacity': 1,
     },
   })
 }
@@ -110,6 +126,9 @@ export const addClusterTextLayer = (map) => {
       'text-field': ['get', 'point_count_abbreviated'],
       'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
       'text-size': 24,
+    },
+    paint: {
+      'text-color': '#ffffff',
     },
   })
 
