@@ -44,16 +44,21 @@ export const addGliderOperationSource = (map, features) => {
   return map
 }
 
-export const addGliderOperationClickHandler = (map, zoom) => {
+export const addGliderOperationClickHandler = (map, handleClick) => {
   map.on('click', 'gliderport-points', (e) => {
-    const title = e.features[0].properties.title
+    const properties = e.features[0].properties
     const coordinates = e.features[0].geometry.coordinates.slice()
+
+    const currentZoom = map.getZoom()
+    console.log(currentZoom)
 
     map.easeTo({
       center: coordinates,
+      zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
     })
 
-    new mapboxgl.Popup().setLngLat(coordinates).setHTML(title).addTo(map)
+    // new mapboxgl.Popup().setLngLat(coordinates).setHTML(title).addTo(map)
+    handleClick(properties)
   })
 }
 
