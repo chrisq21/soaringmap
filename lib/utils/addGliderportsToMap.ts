@@ -112,7 +112,7 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
   const zoomToGliderport = () => {
     map.easeTo({
       center: coordinates,
-      zoom: 11,
+      zoom: 13,
       duration: 3000,
     })
 
@@ -125,7 +125,7 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
       <button id='zoom-btn'>Zoom in</button>
     </div>
   `
-  if (map.getZoom() >= 9) return
+  if (map.getZoom() >= 10) return
 
   popup.setLngLat(coordinates).setHTML(html).addTo(map)
   document.getElementById('zoom-btn').addEventListener('click', zoomToGliderport)
