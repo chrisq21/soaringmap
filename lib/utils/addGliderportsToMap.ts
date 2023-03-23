@@ -1,6 +1,7 @@
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import {GLIDERPORT} from '../../types/gliderport'
 import mockGliderports from '../../lib/data/gliderports'
+let popup
 
 export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   /* Add gliderports to map */
@@ -12,6 +13,10 @@ export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   addGliderportMarkers(map)
   addGliderportClusters(map)
   handleGliderportClusterClick(map)
+  popup = new mapboxgl.Popup({closeButton: false, closeOnClick: false, closeOnMove: false})
+  map.on('closePopup', () => {
+    popup.remove()
+  })
 }
 
 export const getGliderportFeatures = (gliderportData) => {
@@ -98,25 +103,32 @@ export const addGliderportMarkers = (map) => {
 }
 
 export const showActiveGliderportPopup = (map, activeGliderport) => {
-  // clear current popups
-
-  map.fire('closeAllPopups')
-
-  const currentZoom = map.getZoom()
   const coordinates = activeGliderport.coordinates.slice()
 
-  // lookup properties for selected gliderport
   map.easeTo({
     center: coordinates,
-    zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
   })
 
-  const popup = new mapboxgl.Popup().setLngLat(coordinates).setHTML(activeGliderport.title).addTo(map)
+  const zoomToGliderport = () => {
+    map.easeTo({
+      center: coordinates,
+      zoom: 14,
+      duration: 3000,
+    })
 
-  // Add a custom event listener to the map
-  map.on('closeAllPopups', () => {
-    popup.remove()
-  })
+    map.fire('closePopup')
+  }
+
+  const html = `
+    <div>
+      <p><b>${activeGliderport.title}</b></p>
+      <button id='zoom-btn'>Zoom in</button>
+    </div>
+  `
+  if (map.getZoom() >= 12) return
+
+  popup.setLngLat(coordinates).setHTML(html).addTo(map)
+  document.getElementById('zoom-btn').addEventListener('click', zoomToGliderport)
 }
 
 export const handleGliderportMarkerClick = (map, handleClick) => {
@@ -125,7 +137,7 @@ export const handleGliderportMarkerClick = (map, handleClick) => {
     const gliderport = mockGliderports.find((g: GLIDERPORT) => g.title === properties.title)
     if (!gliderport) return
 
-    handleClick(gliderport) // TODO in the future this should be the glideport ID
+    handleClick({...gliderport}) // TODO in the future this should be the glideport ID
   })
 }
 

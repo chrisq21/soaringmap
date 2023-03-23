@@ -35,7 +35,12 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedGliderport) {
+      console.log('selectedGliderport', selectedGliderport.title)
       showActiveGliderportPopup(map.current, selectedGliderport)
+    }
+
+    if (!selectedGliderport) {
+      map.current.fire('closePopup')
     }
   }, [selectedGliderport])
 
