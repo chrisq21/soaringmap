@@ -9,7 +9,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import {GLIDERPORT} from '../types/gliderport'
 import {addBaseMapStyles, configureMap} from '../lib/utils/mapSetup'
-import addGliderportsToMap from '../lib/utils/addGliderportsToMap'
+import addGliderportsToMap, {showActiveGliderportPopup} from '../lib/utils/addGliderportsToMap'
 import List from '../components/List'
 import Details from '../components/Details'
 // TODO move to env file
@@ -32,6 +32,12 @@ export default function Home() {
       addGliderportsToMap(map.current, mockGliderports, setSelectedGliderport)
     })
   })
+
+  useEffect(() => {
+    if (selectedGliderport) {
+      showActiveGliderportPopup(map.current, selectedGliderport)
+    }
+  }, [selectedGliderport])
 
   return (
     <Layout>

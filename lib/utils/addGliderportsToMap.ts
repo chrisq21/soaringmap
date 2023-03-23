@@ -1,12 +1,13 @@
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import {GLIDERPORT} from '../../types/gliderport'
+import mockGliderports from '../../lib/data/gliderports'
 
-export default (map, gliderports: GLIDERPORT[], setSelectedGliderport) => {
+export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   /* Add gliderports to map */
   const gliderportFeatures = getGliderportFeatures(gliderports)
   addGliderportSource(map, gliderportFeatures)
   handleGliderportMarkerClick(map, (e) => {
-    setSelectedGliderport(e)
+    setSelectedGliderportTitle(e)
   })
   addGliderportMarkers(map)
   addGliderportClusters(map)
@@ -96,22 +97,35 @@ export const addGliderportMarkers = (map) => {
   })
 }
 
+export const showActiveGliderportPopup = (map, activeGliderport) => {
+  // clear current popups
+
+  map.fire('closeAllPopups')
+
+  const currentZoom = map.getZoom()
+  const coordinates = activeGliderport.coordinates.slice()
+
+  // lookup properties for selected gliderport
+  map.easeTo({
+    center: coordinates,
+    zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
+  })
+
+  const popup = new mapboxgl.Popup().setLngLat(coordinates).setHTML(activeGliderport.title).addTo(map)
+
+  // Add a custom event listener to the map
+  map.on('closeAllPopups', () => {
+    popup.remove()
+  })
+}
+
 export const handleGliderportMarkerClick = (map, handleClick) => {
   map.on('click', 'gliderport-circles', (e) => {
     const properties = e.features[0].properties
-    const coordinates = e.features[0].geometry.coordinates.slice()
+    const gliderport = mockGliderports.find((g: GLIDERPORT) => g.title === properties.title)
+    if (!gliderport) return
 
-    const featureId = e.features[0].properties.id
-
-    const currentZoom = map.getZoom()
-
-    map.easeTo({
-      center: coordinates,
-      zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
-    })
-
-    new mapboxgl.Popup().setLngLat(coordinates).setHTML(properties.title).addTo(map)
-    handleClick(properties)
+    handleClick(gliderport) // TODO in the future this should be the glideport ID
   })
 }
 
