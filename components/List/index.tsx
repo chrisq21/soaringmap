@@ -1,23 +1,23 @@
 import styles from './List.module.css'
 
-export default ({poiArray, map, handleClick}) => {
+export default ({items, map, handleClick}) => {
   return (
     <div className={styles.container}>
       <span className={styles.category}>Glider Operation</span>
-      {poiArray.map((poi, index) => (
+      {items.map((item, index) => (
         <button
           key={index}
-          className={styles.poiTitle}
+          className={styles.itemTitle}
           onClick={() => {
             const currentZoom = map.current.getZoom()
-            handleClick(poi)
+            handleClick(item)
             map.current.easeTo({
-              center: poi.coordinates,
+              center: item.coordinates,
               zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
             })
           }}
         >
-          {poi.title}
+          {item.title}
         </button>
       ))}
     </div>

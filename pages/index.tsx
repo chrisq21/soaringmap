@@ -3,20 +3,13 @@ import Layout, {siteTitle} from '../components/layout'
 import styles from '../styles/homepage.module.css'
 import {getSortedPostsData} from '../lib/posts'
 import {useEffect, useRef, useState} from 'react'
-import mockGliderOperations from '../lib/data/operations'
+import mockGliderports from '../lib/data/gliderports'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
-import {GLIDER_OPERATION_POI, POI, POI_CATEGORY} from '../types/POI'
+import {GLIDERPORT} from '../types/gliderport'
 import {addBaseMapStyles, configureMap} from '../lib/utils/mapSetup'
-import {
-  addClusterLayer,
-  addClusterTextLayer,
-  addGliderOperationClickHandler,
-  addGliderOperationMarkers,
-  addGliderOperationSource,
-  getPOIFeatures,
-} from '../lib/utils/mapPOISetup'
+import addGliderportsToMap from '../lib/utils/addGliderportsToMap'
 import List from '../components/List'
 import Details from '../components/Details'
 // TODO move to env file
@@ -26,7 +19,7 @@ export default function Home() {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [zoom, setZoom] = useState(4)
-  const [selectedOperation, setSelectedOperation] = useState<GLIDER_OPERATION_POI>(null)
+  const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
 
   /* Setup Map */
   useEffect(() => {
@@ -36,18 +29,7 @@ export default function Home() {
 
     map.current.on('style.load', () => {
       addBaseMapStyles(map.current)
-
-      /* Glider operation POI setup */
-      const gliderOperationFeatures = getPOIFeatures(mockGliderOperations)
-      addGliderOperationSource(map.current, gliderOperationFeatures)
-      addGliderOperationClickHandler(map.current, (e) => {
-        setSelectedOperation(e)
-      })
-      addGliderOperationMarkers(map.current, gliderOperationFeatures, styles.marker)
-
-      // Clusters
-      addClusterLayer(map.current)
-      addClusterTextLayer(map.current)
+      addGliderportsToMap(map.current, mockGliderports, setSelectedGliderport)
     })
   })
 
@@ -60,13 +42,13 @@ export default function Home() {
         {/* Sidebar */}
         <div className={styles.sidebar}>
           <div>
-            {selectedOperation && <Details details={selectedOperation} handleClick={() => setSelectedOperation(null)} />}
-            {!selectedOperation && (
+            {selectedGliderport && <Details details={selectedGliderport} handleClick={() => setSelectedGliderport(null)} />}
+            {!selectedGliderport && (
               <List
-                poiArray={mockGliderOperations}
+                items={mockGliderports}
                 map={map}
                 handleClick={(e) => {
-                  setSelectedOperation(e)
+                  setSelectedGliderport(e)
                 }}
               />
             )}

@@ -1,4 +1,4 @@
-import {GLIDER_OPERATION_POI} from '../../types/POI'
+import {GLIDER_OPERATION_POI} from '../../types/gliderport'
 import styles from './Details.module.css'
 
 export default ({details, handleClick}: {details: GLIDER_OPERATION_POI; handleClick: () => void}) => {
