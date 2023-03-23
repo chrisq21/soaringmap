@@ -6,10 +6,12 @@ export default ({details, handleClick}: {details: GLIDER_OPERATION_POI; handleCl
   return (
     <div className={styles.container}>
       <button onClick={handleClick}>Back</button>
-      <h1>{title}</h1>
-      {/* TODO add location data */}
-      <span>Front Royal, VA</span>
-      <span>{operationType}</span>
+      <div className={styles.headerContainer}>
+        <h1>{title}</h1>
+        <img src="./images/gliderport.jpeg" alt="Gliderport" />
+        <span>Front Royal, VA</span>
+        <span>{operationType}</span>
+      </div>
     </div>
   )
 }

@@ -1,12 +1,20 @@
 import {POI_CATEGORY} from '../../types/POI'
 export default [
-  {title: 'Adrian, MI', coordinates: [-84.0422, 41.9008], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
+  {
+    title: 'Adrian, MI',
+    coordinates: [-84.0422, 41.9008],
+    category: POI_CATEGORY.GLIDER_OPERATION,
+    description: 'description',
+    operationType: 'commercial',
+    id: 1,
+  },
   {
     title: 'Alamogordo, NM',
     coordinates: [-105.9605, 32.8998],
     category: POI_CATEGORY.GLIDER_OPERATION,
     description: 'description',
     operationType: 'commercial',
+    id: 2,
   },
   {title: 'Alexandria, IN', coordinates: [-85.6785, 40.2605], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
   {title: 'Arlington, WA', coordinates: [-122.1243, 48.1954], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
@@ -20,7 +28,14 @@ export default [
   {title: 'Briggs, TX', coordinates: [-97.2889, 30.8249], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
   {title: 'Butler, GA', coordinates: [-84.2442, 32.5625], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
   {title: 'Byron, CA', coordinates: [-121.6383, 37.8496], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
-  {title: 'Cadillac, MI', coordinates: [-85.4019, 44.2463], category: POI_CATEGORY.GLIDER_OPERATION, description: 'description', operationType: 'commercial'},
+  {
+    title: 'Cadillac, MI',
+    coordinates: [-85.4019, 44.2463],
+    category: POI_CATEGORY.GLIDER_OPERATION,
+    description: 'description',
+    operationType: 'commercial',
+    id: 5,
+  },
   {
     title: 'Cherry Valley, AR',
     coordinates: [-90.7861, 35.3438],

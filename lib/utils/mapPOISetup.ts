@@ -2,7 +2,7 @@ import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loade
 
 export const getPOIFeatures = (gliderOperationsData) => {
   /* Create gliderport feature data */
-  const features = gliderOperationsData.map(({title, description, category, coordinates}) => {
+  const features = gliderOperationsData.map(({title, description, category, coordinates}, index) => {
     let geometryData = {}
 
     const featureData = {
@@ -11,6 +11,7 @@ export const getPOIFeatures = (gliderOperationsData) => {
         description,
         icon: 'airfield',
         title: title,
+        id: index,
       },
     }
 
@@ -49,15 +50,16 @@ export const addGliderOperationClickHandler = (map, handleClick) => {
     const properties = e.features[0].properties
     const coordinates = e.features[0].geometry.coordinates.slice()
 
+    const featureId = e.features[0].properties.id
+
     const currentZoom = map.getZoom()
-    console.log(currentZoom)
 
     map.easeTo({
       center: coordinates,
       zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
     })
 
-    // new mapboxgl.Popup().setLngLat(coordinates).setHTML(title).addTo(map)
+    new mapboxgl.Popup().setLngLat(coordinates).setHTML(properties.title).addTo(map)
     handleClick(properties)
   })
 }
@@ -73,6 +75,7 @@ export const addGliderOperationMarkers = (map, features, markerStyles) => {
       'circle-color': '#355C7D',
       'circle-radius': 15,
       'circle-stroke-width': 2,
+
       'circle-stroke-color': '#ffffff',
       'circle-stroke-opacity': 1,
     },
@@ -109,9 +112,7 @@ export const addClusterLayer = (map) => {
     source: 'glider-pois',
     filter: ['has', 'point_count'],
     paint: {
-      // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
       'circle-color': '#355C7D',
-      // 'circle-radius': ['step', ['get', 'point_count'], 17, 2, 20, 3, 23],
       'circle-radius': 15,
       'circle-stroke-width': 2,
       'circle-stroke-color': '#ffffff',

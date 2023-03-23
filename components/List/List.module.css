@@ -1,5 +1,8 @@
 
-/* Sidebar */
+.container {
+  padding: 24px;
+}
+
 .category {
   font-weight: bold;
   color: gray;

@@ -4,7 +4,6 @@ import styles from '../styles/homepage.module.css'
 import {getSortedPostsData} from '../lib/posts'
 import {useEffect, useRef, useState} from 'react'
 import mockGliderOperations from '../lib/data/operations'
-import {mockPOIs} from '../lib/data/mockPOIs'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
@@ -42,7 +41,6 @@ export default function Home() {
       const gliderOperationFeatures = getPOIFeatures(mockGliderOperations)
       addGliderOperationSource(map.current, gliderOperationFeatures)
       addGliderOperationClickHandler(map.current, (e) => {
-        console.log(e)
         setSelectedOperation(e)
       })
       addGliderOperationMarkers(map.current, gliderOperationFeatures, styles.marker)
@@ -68,7 +66,6 @@ export default function Home() {
                 poiArray={mockGliderOperations}
                 map={map}
                 handleClick={(e) => {
-                  console.log(e)
                   setSelectedOperation(e)
                 }}
               />
