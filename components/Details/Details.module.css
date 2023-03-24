@@ -1,19 +1,39 @@
+
 .container {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
+.backBtn {
+  all: unset;
+  text-decoration: underline;
+  margin-left: 32px;
+  cursor: pointer;
+  font-weight: 400;
+}
+
 .headerContainer {
   min-height: 300px;
-  padding: 24px;
+  padding: 32px;
   position: relative;
-  background: rgb(0, 0, 0, 0.4);
+  background: rgb(0, 0, 0, 0.6);
   color: white;
 
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.contentContainer * {
+  color: white;
+}
+
+.contentContainer {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  flex: 1;
 }
 
 .headerContainer img {
@@ -24,4 +44,53 @@
   height: 100%;
   object-fit: cover;
   z-index: -1;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.subtext {
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.link {
+  text-decoration: underline;
+  color: white;
+}
+
+.type {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sectionsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 32px;
+  padding-top: 0;
+}
+
+.section {
+  border-bottom: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+.sectionTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.sectionText {
+  font-size: 18px;
+  font-weight: 300;
+  margin: 0;
 }

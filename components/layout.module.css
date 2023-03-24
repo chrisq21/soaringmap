@@ -12,7 +12,7 @@
 
 .header {
   /* TODO use css variable since this is shared */
-  padding-left: 24px;
+  padding-left: 32px;
 }
 
 .backToHome {
