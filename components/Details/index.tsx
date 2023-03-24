@@ -14,7 +14,7 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
         <img src="./images/gliderport.jpeg" alt="Gliderport" />
         <div className={styles.contentContainer}>
           <div>
-            <h1 className={styles.title}>Skyline Soaring Club</h1>
+            <h1 className={styles.title}>{title}</h1>
             <span className={styles.subtext}>Front Royal, VA</span>
           </div>
           <div>
