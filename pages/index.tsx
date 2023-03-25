@@ -12,14 +12,29 @@ import {addBaseMapStyles, configureMap} from '../lib/utils/mapSetup'
 import addGliderportsToMap, {showActiveGliderportPopup} from '../lib/utils/addGliderportsToMap'
 import List from '../components/List'
 import Details from '../components/Details'
+import {fetchGliderports} from '../lib/utils/fetchGliderports'
 // TODO move to env file
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA'
 
-export default function Home() {
+export default function Home({gliderports}) {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [zoom, setZoom] = useState(4)
   const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
+
+  console.log('gliderports', gliderports)
+  const data = gliderports[0].fields
+
+  const testGliderport: GLIDERPORT = {
+    title: data.title,
+    coordinates: data.coordinates,
+    description: data.description,
+    operationType: data.isClub ? 'club' : 'commercial',
+    website: data.website,
+    image: data.image,
+  }
+
+  const allGliderports = [...mockGliderports, testGliderport]
 
   /* Setup Map */
   useEffect(() => {
@@ -29,7 +44,7 @@ export default function Home() {
 
     map.current.on('style.load', () => {
       addBaseMapStyles(map.current)
-      addGliderportsToMap(map.current, mockGliderports, setSelectedGliderport)
+      addGliderportsToMap(map.current, allGliderports, setSelectedGliderport)
     })
   })
 
@@ -56,7 +71,7 @@ export default function Home() {
             {selectedGliderport && <Details details={selectedGliderport} handleClick={() => setSelectedGliderport(null)} />}
             {!selectedGliderport && (
               <List
-                items={mockGliderports}
+                items={allGliderports}
                 map={map}
                 handleClick={(e) => {
                   setSelectedGliderport(e)
@@ -73,10 +88,9 @@ export default function Home() {
 }
 
 export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
+  const gliderports = await fetchGliderports()
+  console.log('gliderports', gliderports)
   return {
-    props: {
-      allPostsData,
-    },
+    props: {gliderports},
   }
 }

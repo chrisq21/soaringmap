@@ -2,7 +2,8 @@ import {GLIDERPORT} from '../../types/gliderport'
 import styles from './Details.module.css'
 
 export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () => void}) => {
-  const {title, operationType} = details
+  const {title, operationType, description, website, image} = details
+  console.log(details)
   return (
     <div className={styles.container}>
       <div>
@@ -11,7 +12,7 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
         </button>
       </div>
       <div className={styles.headerContainer}>
-        <img src="./images/gliderport.jpeg" alt="Gliderport" />
+        <img src={image?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
         <div className={styles.contentContainer}>
           <div>
             <h1 className={styles.title}>{title}</h1>
@@ -19,10 +20,10 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
           </div>
           <div>
             <div className={styles.subtext}>
-              <span>Type:</span> <span className={styles.type}>Commerical</span>
+              <span>Type:</span> <span className={styles.type}>{operationType}</span>
             </div>
-            <a href="https://www.skylinesoaring.org/" className={styles.link} target="_blank">
-              www.skylinesoaring.org
+            <a href={website} className={styles.link} target="_blank">
+              {website}
             </a>
           </div>
         </div>
@@ -30,7 +31,7 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
       <div className={styles.sectionsContainer}>
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Description</h2>
-          <p className={styles.sectionText}>Come soar with us over the beautiful and historic shenendoah valley. Our club offers a wide ra…</p>
+          <p className={styles.sectionText}>{description}</p>
         </div>
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Lift sources</h2>

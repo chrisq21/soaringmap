@@ -1,13 +1,12 @@
 import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
 import {GLIDERPORT} from '../../types/gliderport'
-import mockGliderports from '../../lib/data/gliderports'
 let popup
 
 export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   /* Add gliderports to map */
   const gliderportFeatures = getGliderportFeatures(gliderports)
   addGliderportSource(map, gliderportFeatures)
-  handleGliderportMarkerClick(map, (e) => {
+  handleGliderportMarkerClick(map, gliderports, (e) => {
     setSelectedGliderportTitle(e)
   })
   addGliderportMarkers(map)
@@ -148,10 +147,10 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
   document.getElementById('zoom-btn').addEventListener('click', zoomToGliderport)
 }
 
-export const handleGliderportMarkerClick = (map, handleClick) => {
+export const handleGliderportMarkerClick = (map, gliderports, handleClick) => {
   map.on('click', 'gliderport-circles', (e) => {
     const properties = e.features[0].properties
-    const gliderport = mockGliderports.find((g: GLIDERPORT) => g.title === properties.title)
+    const gliderport = gliderports.find((g: GLIDERPORT) => g.title === properties.title)
     if (!gliderport) return
 
     handleClick({...gliderport}) // TODO in the future this should be the glideport ID
