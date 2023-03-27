@@ -6,4 +6,5 @@ export type GLIDERPORT = {
   id?: number
   website?: string
   image?: any
+  satelliteImage?: any
 }

@@ -22,6 +22,6 @@ export const addBaseMapStyles = (map) => {
 
   map.setTerrain({
     source: 'mapbox-dem',
-    exaggeration: 1.5,
+    exaggeration: 1,
   })
 }

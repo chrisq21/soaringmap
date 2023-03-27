@@ -2,7 +2,7 @@ import {GLIDERPORT} from '../../types/gliderport'
 import styles from './Details.module.css'
 
 export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () => void}) => {
-  const {title, operationType, description, website, image} = details
+  const {title, operationType, description, website, image, satelliteImage} = details
   console.log(details)
   return (
     <div className={styles.container}>
@@ -12,21 +12,19 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
         </button>
       </div>
       <div className={styles.headerContainer}>
-        <img src={image?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
-        <div className={styles.contentContainer}>
-          <div>
-            <h1 className={styles.title}>{title}</h1>
-            <span className={styles.subtext}>Front Royal, VA</span>
-          </div>
-          <div>
-            <div className={styles.subtext}>
-              <span>Type:</span> <span className={styles.type}>{operationType}</span>
-            </div>
-            <a href={website} className={styles.link} target="_blank">
-              {website}
-            </a>
-          </div>
+        <div className={styles.headerTextContainer}>
+          <h1 className={styles.title}>{title}</h1>
+          <span className={styles.subtext}>Front Royal, VA</span>
+          <a className={styles.link} href={website}>
+            {website}
+          </a>
         </div>
+        <img src={image?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
+      </div>
+      <div className={styles.sectionsContainer}>
+        <img className={styles.satelliteImage} src={satelliteImage?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
+        <span>Satellite image</span>
+        <span>See on map</span>
       </div>
       <div className={styles.sectionsContainer}>
         <div className={styles.section}>

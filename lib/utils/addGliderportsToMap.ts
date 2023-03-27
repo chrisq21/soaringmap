@@ -9,7 +9,7 @@ export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   handleGliderportMarkerClick(map, gliderports, (e) => {
     setSelectedGliderportTitle(e)
   })
-  addGliderportMarkers(map)
+  // addGliderportMarkers(map)
   addGliderportClusters(map)
   handleGliderportClusterClick(map)
   popup = new mapboxgl.Popup({closeButton: false, closeOnClick: false, closeOnMove: false})

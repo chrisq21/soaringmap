@@ -32,6 +32,7 @@ export default function Home({gliderports}) {
     operationType: data.isClub ? 'club' : 'commercial',
     website: data.website,
     image: data.image,
+    satelliteImage: data.satelliteImage,
   }
 
   const allGliderports = [...mockGliderports, testGliderport]
