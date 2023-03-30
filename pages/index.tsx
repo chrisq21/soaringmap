@@ -16,26 +16,23 @@ import {fetchGliderports} from '../lib/utils/fetchGliderports'
 // TODO move to env file
 mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA'
 
-export default function Home({gliderports}) {
+export default function Home({gliderportData}) {
   const mapContainer = useRef(null)
   const map = useRef(null)
   const [zoom, setZoom] = useState(4)
   const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
 
-  console.log('gliderports', gliderports)
-  const data = gliderports[0].fields
+  const allGliderports: GLIDERPORT[] = gliderportData.map((gliderport) => {
+    const {fields} = gliderport
+    return {
+      title: fields.title,
+      coordinates: fields.coordinates,
+      state: fields.state,
+      city: fields.city,
+    }
+  })
 
-  const testGliderport: GLIDERPORT = {
-    title: data.title,
-    coordinates: data.coordinates,
-    description: data.description,
-    operationType: data.isClub ? 'club' : 'commercial',
-    website: data.website,
-    image: data.image,
-    satelliteImage: data.satelliteImage,
-  }
-
-  const allGliderports = [...mockGliderports, testGliderport]
+  console.log(allGliderports)
 
   /* Setup Map */
   useEffect(() => {
@@ -51,7 +48,6 @@ export default function Home({gliderports}) {
 
   useEffect(() => {
     if (selectedGliderport) {
-      console.log('selectedGliderport', selectedGliderport.title)
       showActiveGliderportPopup(map.current, selectedGliderport)
     }
 
@@ -69,7 +65,20 @@ export default function Home({gliderports}) {
         {/* Sidebar */}
         <div className={styles.sidebar}>
           <div>
-            {selectedGliderport && <Details details={selectedGliderport} handleClick={() => setSelectedGliderport(null)} />}
+            {selectedGliderport && (
+              <Details
+                details={selectedGliderport}
+                handleClick={() => setSelectedGliderport(null)}
+                handleImageClick={() => {
+                  map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
+                  map.current.flyTo({
+                    center: selectedGliderport.coordinates,
+                    zoom: 12,
+                    duration: 0,
+                  })
+                }}
+              />
+            )}
             {!selectedGliderport && (
               <List
                 items={allGliderports}
@@ -89,9 +98,8 @@ export default function Home({gliderports}) {
 }
 
 export async function getStaticProps() {
-  const gliderports = await fetchGliderports()
-  console.log('gliderports', gliderports)
+  const gliderportData = await fetchGliderports()
   return {
-    props: {gliderports},
+    props: {gliderportData},
   }
 }

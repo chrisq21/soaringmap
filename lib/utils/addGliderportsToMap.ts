@@ -9,10 +9,10 @@ export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
   handleGliderportMarkerClick(map, gliderports, (e) => {
     setSelectedGliderportTitle(e)
   })
-  // addGliderportMarkers(map)
+  addGliderportMarkers(map)
   addGliderportClusters(map)
   handleGliderportClusterClick(map)
-  popup = new mapboxgl.Popup({closeButton: false, closeOnClick: false, closeOnMove: false})
+  popup = new mapboxgl.Popup({closeButton: true, closeOnClick: false, closeOnMove: false})
   map.on('closePopup', () => {
     popup.remove()
   })
@@ -126,7 +126,6 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
         center: coordinates,
         zoom: zoomedInValue,
         duration: 3000,
-        pitch: 60,
       })
     }
 
@@ -136,10 +135,8 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
   const zoomText = map.getZoom() >= 10 ? 'Zoom out' : 'Zoom in'
 
   const html = `
-    <div>
       <p><b>${activeGliderport.title}</b></p>
       <button id='zoom-btn'>${zoomText}</button>
-    </div>
   `
   // if (map.getZoom() >= 10) return
 

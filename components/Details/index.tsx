@@ -1,9 +1,47 @@
+import {useEffect, useState} from 'react'
 import {GLIDERPORT} from '../../types/gliderport'
 import styles from './Details.module.css'
 
-export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () => void}) => {
-  const {title, operationType, description, website, image, satelliteImage} = details
-  console.log(details)
+type AdditionalDetails = {
+  formatted_phone_number: string
+  website: string
+  name: string
+  formatted_address: string
+  opening_hours: string
+  photos: any
+}
+
+export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; handleClick: () => void; handleImageClick: () => void}) => {
+  const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
+  const {formatted_address, website, formatted_phone_number} = additionalDetails || {}
+  const {title, coordinates, state, city} = details
+
+  const satelliteImageWidth = 400
+  const satelliteImageHeight = 300
+  const satelliteZoom = 15
+  const accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA' // TODO move
+  const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${details.coordinates.toString()},${satelliteZoom}/${satelliteImageWidth}x${satelliteImageHeight}?access_token=${accessToken}`
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const res = await fetch('/api/fetchDetails')
+        const data = await res.json()
+
+        if (!data) {
+          console.error('No data found')
+          return
+        }
+
+        setAdditionalDetails(data)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    fetchDetails()
+  }, [])
+
   return (
     <div className={styles.container}>
       <div>
@@ -14,48 +52,33 @@ export default ({details, handleClick}: {details: GLIDERPORT; handleClick: () =>
       <div className={styles.headerContainer}>
         <div className={styles.headerTextContainer}>
           <h1 className={styles.title}>{title}</h1>
-          <span className={styles.subtext}>Front Royal, VA</span>
-          <a className={styles.link} href={website}>
-            {website}
-          </a>
+          <span className={styles.subtext}>
+            {city}, {state}
+          </span>
         </div>
-        <img src={image?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
       </div>
+      {/* Satellite Image */}
       <div className={styles.sectionsContainer}>
-        <img className={styles.satelliteImage} src={satelliteImage?.fields?.file?.url || './images/gliderport.jpeg'} alt="Gliderport" />
-        <span>Satellite image</span>
-        <span>See on map</span>
-      </div>
-      <div className={styles.sectionsContainer}>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Description</h2>
-          <p className={styles.sectionText}>{description}</p>
-        </div>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Lift sources</h2>
-          <p className={styles.sectionText}>Thermals, Ridge, Wave</p>
-        </div>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Operation times</h2>
-          <p className={styles.sectionText}>
-            <li>Weekends only</li>
-            <li>March, April, May, June, July, August, September, October, November, December</li>
-          </p>
-        </div>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Contact</h2>
-          <p className={styles.sectionText}>welcome@skylinesoaring.org</p>
-          <p className={styles.sectionText}>(302) 743-7359</p>
-        </div>
-        <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Additional Information</h2>
-          <p className={styles.sectionText}>
-            <li>Offers flight training: Yes</li>
-            <li>Members only: Yes</li>
-            <li>Offers FAST flights: Yes</li>
-          </p>
+        <img className={styles.satelliteImage} src={staticMapUrl} alt="Gliderport" />
+        <div className={styles.satelliteContainer}>
+          <span>Satellite image</span>
+          <span onClick={handleImageClick} className={styles.link}>
+            (see on map)
+          </span>
         </div>
       </div>
+      {additionalDetails && (
+        <div className={styles.sectionsContainer}>
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Contact Information</h2>
+            <a className={styles.link} href={website} target="_blank">
+              {website}
+            </a>
+            <p className={styles.sectionText}>{formatted_phone_number}</p>
+            <p className={styles.sectionText}>{formatted_address}</p>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

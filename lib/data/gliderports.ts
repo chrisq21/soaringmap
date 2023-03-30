@@ -68,7 +68,7 @@ const gliderports: GLIDERPORT[] = [
   {title: 'Freehold, NY', coordinates: [-74.2505, 42.3855], description: 'description', operationType: 'commercial'},
   {
     title: 'Front Royal, VA',
-    coordinates: [-78.1944, 38.9182],
+    coordinates: [-78.2482, 38.9188],
 
     description: 'description',
     operationType: 'commercial',

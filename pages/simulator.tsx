@@ -2,6 +2,8 @@ import Layout from '../components/layout'
 import * as THREE from 'three'
 import {useEffect} from 'react'
 
+import grassSrc from './grass.jpg'
+
 export default function Simulator() {
   useEffect(() => {
     // Define the glider and environment models
@@ -13,7 +15,7 @@ export default function Simulator() {
     var airDensity = 1.225 // kg/m^3
     var windSpeed = 0 // m/s
 
-    var thrustAcceleration = 1 // m/s^2
+    var thrustAcceleration = 100 // m/s^2
 
     var gliderMass = 100 // kg
 
@@ -101,16 +103,24 @@ export default function Simulator() {
     gliderModel = new THREE.Mesh(gliderGeometry, gliderMaterial)
     scene.add(gliderModel)
 
-    // Create the ground model
-    var groundGeometry = new THREE.PlaneGeometry(1000, 1000)
-    var groundMaterial = new THREE.MeshBasicMaterial({color: 0x999999})
+    // Load the texture image
+    var textureLoader = new THREE.TextureLoader()
+    var groundTexture = textureLoader.load('./grass.jpg', (texture) => {
+      texture.wrapS = THREE.RepeatWrapping
+      texture.wrapT = THREE.RepeatWrapping
+      texture.repeat.set(50, 50)
+    })
+
+    // Create the ground model with the texture
+    var groundGeometry = new THREE.PlaneGeometry(10000, 10000)
+    var groundMaterial = new THREE.MeshBasicMaterial({map: groundTexture})
     groundModel = new THREE.Mesh(groundGeometry, groundMaterial)
     groundModel.rotation.x = -Math.PI / 2
     scene.add(groundModel)
 
     // Set the camera position
     camera.position.z = 5
-    camera.position.y = 2
+    camera.position.y = 0
     camera.lookAt(gliderModel.position)
 
     document.addEventListener('keydown', function (event) {
@@ -150,9 +160,13 @@ export default function Simulator() {
         gliderModel.quaternion.copy(gliderState.quaternion)
       }
 
-      // Update the camera position and look-at target
-      camera.position.set(0, 5, -10)
-      camera.lookAt(gliderModel.position)
+      // Update the camera position to be behind the glider
+      var cameraDistance = 10
+      var cameraOffset = new THREE.Vector3(0, 1, -cameraDistance)
+      var cameraPosition = cameraOffset.applyQuaternion(gliderState.quaternion)
+      cameraPosition.add(gliderState.position)
+      camera.position.copy(cameraPosition)
+      camera.lookAt(gliderState.position)
 
       renderer.render(scene, camera)
     }
