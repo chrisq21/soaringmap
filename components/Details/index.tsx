@@ -20,12 +20,25 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
   const satelliteImageHeight = 300
   const satelliteZoom = 15
   const accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA' // TODO move
-  const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${details.coordinates.toString()},${satelliteZoom}/${satelliteImageWidth}x${satelliteImageHeight}?access_token=${accessToken}`
+  const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${details.coordinates
+    .toString()
+    .trim()},${satelliteZoom}/${satelliteImageWidth}x${satelliteImageHeight}?access_token=${accessToken}`
 
   useEffect(() => {
     const fetchDetails = async () => {
+      const detailsData = {
+        title,
+        coordinates,
+      }
+
       try {
-        const res = await fetch('/api/fetchDetails')
+        const res = await fetch('/api/fetchDetails', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(detailsData),
+        })
         const data = await res.json()
 
         if (!data) {
@@ -40,7 +53,7 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
     }
 
     fetchDetails()
-  }, [])
+  }, [title])
 
   return (
     <div className={styles.container}>

@@ -32,8 +32,6 @@ export default function Home({gliderportData}) {
     }
   })
 
-  console.log(allGliderports)
-
   /* Setup Map */
   useEffect(() => {
     if (map.current) return
@@ -41,10 +39,11 @@ export default function Home({gliderportData}) {
     map.current = configureMap(map.current, mapContainer.current, zoom)
 
     map.current.on('style.load', () => {
+      map.current.fire('closePopup')
       addBaseMapStyles(map.current)
       addGliderportsToMap(map.current, allGliderports, setSelectedGliderport)
     })
-  })
+  }, [])
 
   useEffect(() => {
     if (selectedGliderport) {
@@ -70,10 +69,12 @@ export default function Home({gliderportData}) {
                 details={selectedGliderport}
                 handleClick={() => setSelectedGliderport(null)}
                 handleImageClick={() => {
-                  map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
+                  if (!map.current.getStyle().name.toLowerCase().includes('satellite')) {
+                    map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
+                  }
                   map.current.flyTo({
                     center: selectedGliderport.coordinates,
-                    zoom: 12,
+                    zoom: 14,
                     duration: 0,
                   })
                 }}

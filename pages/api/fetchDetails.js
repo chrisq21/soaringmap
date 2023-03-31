@@ -4,10 +4,13 @@ const placesDetailsBaseUrl = 'https://maps.googleapis.com/maps/api/place/details
 
 export default async (req, res) => {
   const fetchBaseInfo = async () => {
+    const {title, coordinates} = req.body
+    console.log('title', title)
     const placesSearchParams = new URLSearchParams()
-    placesSearchParams.append('input', 'Skyline Soaring Association') // todo - get title from req
+    placesSearchParams.append('input', title)
     placesSearchParams.append('inputtype', 'textquery')
     placesSearchParams.append('fields', 'name,place_id,formatted_address,opening_hours,photos')
+    placesSearchParams.append('locationbias', `circle:50@${coordinates[1]},${coordinates[0]}`)
     placesSearchParams.append('key', googleAPIToken)
     const detailsRequestUrl = `${placesSearchBaseUrl}?${placesSearchParams.toString()}`
     // TODO laterr use coordinates to pin down the search
