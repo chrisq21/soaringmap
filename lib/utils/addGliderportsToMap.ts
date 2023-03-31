@@ -109,7 +109,7 @@ export const showActiveGliderportPopup = (map, activeGliderport) => {
   })
 
   const zoomToGliderport = (e) => {
-    const zoomedInValue = 11
+    const zoomedInValue = 14
     const zoomedOutValue = 5
 
     if (map.getZoom() >= 10) {

@@ -8,6 +8,7 @@ export const configureMap = (map, mapContainer, zoom) => {
     center: [-77.3513761, 39.75704], // TODO determine default
     zoom: zoom,
   })
+  mapInstance.addControl(new mapboxgl.NavigationControl())
   return mapInstance
 }
 

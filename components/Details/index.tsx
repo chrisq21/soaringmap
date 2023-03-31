@@ -78,7 +78,7 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
       </div>
       {/* Satellite Image */}
       <div className={styles.sectionsContainer}>
-        <img className={styles.image} src={staticMapUrl} alt="Gliderport" />
+        <img className={`${styles.image} ${styles.link}`} src={staticMapUrl} alt="Gliderport" onClick={handleImageClick} />
         <div className={styles.satelliteContainer}>
           <span>Satellite image</span>
           <span onClick={handleImageClick} className={styles.link}>
@@ -93,6 +93,7 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
             <div className={styles.section}>
               <div>
                 <h2 className={styles.sectionTitle}>Photo(s)</h2>
+                <span className={styles.subtext}>source: Google maps</span>
               </div>
               {additionalDetails.photos.map((photo, index) => {
                 if (!seeMorePhotos && index !== 0) return
@@ -107,7 +108,6 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
                   See more photos
                 </button>
               )}
-              <span className={styles.subtext}>source: Google maps API</span>
             </div>
           )}
         </div>
