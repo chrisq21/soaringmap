@@ -21,6 +21,7 @@ export default function Home({gliderportData}) {
   const map = useRef(null)
   const [zoom, setZoom] = useState(4)
   const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
+  const [isDefaultMap, setIsDefaultMap] = useState<boolean | null>(null)
 
   const allGliderports: GLIDERPORT[] = gliderportData.map((gliderport) => {
     const {fields} = gliderport
@@ -56,6 +57,20 @@ export default function Home({gliderportData}) {
     }
   }, [selectedGliderport])
 
+  useEffect(() => {
+    if (!map.current) return
+
+    if (isDefaultMap === null) return
+
+    if (isDefaultMap && map.current.getStyle().name.toLowerCase().includes('satellite')) {
+      map.current.setStyle('mapbox://styles/mapbox/outdoors-v9')
+    } else if (!isDefaultMap && map.current.getStyle().name.toLowerCase().includes('outdoors')) {
+      map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
+    }
+
+    console.log('isDefaultMap', isDefaultMap)
+  }, [isDefaultMap])
+
   return (
     <Layout>
       <Head>
@@ -70,9 +85,6 @@ export default function Home({gliderportData}) {
                 key={selectedGliderport.title}
                 details={selectedGliderport}
                 handleBackClick={() => {
-                  if (!map.current.getStyle().name.toLowerCase().includes('outdoors')) {
-                    map.current.setStyle('mapbox://styles/mapbox/outdoors-v9')
-                  }
                   setSelectedGliderport(null)
                   map.current.flyTo({
                     zoom: 4,
@@ -80,9 +92,8 @@ export default function Home({gliderportData}) {
                   })
                 }}
                 handleImageClick={() => {
-                  if (!map.current.getStyle().name.toLowerCase().includes('satellite')) {
-                    map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
-                  }
+                  // clicked satellite image
+                  setIsDefaultMap(false)
                   map.current.flyTo({
                     center: selectedGliderport.coordinates,
                     zoom: 14,
@@ -103,7 +114,25 @@ export default function Home({gliderportData}) {
           </div>
         </div>
         {/* Map */}
-        <div ref={mapContainer} className={styles.mapContainer} />
+        <div ref={mapContainer} className={styles.mapContainer}>
+          <div className={styles.mapStyleSwitcher}>
+            <span>Map type: </span>
+            <label
+              onClick={() => {
+                if (!isDefaultMap && isDefaultMap !== null) setIsDefaultMap(true)
+              }}
+            >
+              <input type="radio" value="default" name="map-style" checked={isDefaultMap || isDefaultMap === null} /> Default
+            </label>
+            <label
+              onClick={() => {
+                if (isDefaultMap || isDefaultMap === null) setIsDefaultMap(false)
+              }}
+            >
+              <input type="radio" value="satellite" name="map-style" checked={!isDefaultMap && isDefaultMap !== null} /> Satellite
+            </label>
+          </div>
+        </div>
       </section>
     </Layout>
   )
