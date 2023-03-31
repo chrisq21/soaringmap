@@ -8,11 +8,16 @@
 
 .main {
   flex: 1;
+  min-height: calc(100vh - var(--header-height));
 }
 
 .header {
   /* TODO use css variable since this is shared */
-  padding-left: 32px;
+  padding-left: var(--global-padding);
+  height: var(--header-height);
+  background: white;
+  display: flex;
+  align-items: center;
 }
 
 .backToHome {

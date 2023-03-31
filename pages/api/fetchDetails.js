@@ -5,15 +5,13 @@ const placesDetailsBaseUrl = 'https://maps.googleapis.com/maps/api/place/details
 export default async (req, res) => {
   const fetchBaseInfo = async () => {
     const {title, coordinates} = req.body
-    console.log('title', title)
     const placesSearchParams = new URLSearchParams()
     placesSearchParams.append('input', title)
     placesSearchParams.append('inputtype', 'textquery')
-    placesSearchParams.append('fields', 'name,place_id,formatted_address,opening_hours,photos')
-    placesSearchParams.append('locationbias', `circle:50@${coordinates[1]},${coordinates[0]}`)
+    placesSearchParams.append('fields', 'name,place_id,photos')
+    placesSearchParams.append('locationbias', `circle:10@${coordinates[1]},${coordinates[0]}`)
     placesSearchParams.append('key', googleAPIToken)
     const detailsRequestUrl = `${placesSearchBaseUrl}?${placesSearchParams.toString()}`
-    // TODO laterr use coordinates to pin down the search
 
     try {
       const res = await fetch(detailsRequestUrl)
@@ -29,7 +27,7 @@ export default async (req, res) => {
   const fetchDetails = async (place_id) => {
     const placesDetailsParams = new URLSearchParams()
     placesDetailsParams.append('place_id', place_id)
-    placesDetailsParams.append('fields', 'formatted_phone_number,website')
+    placesDetailsParams.append('fields', 'formatted_phone_number,website,photos')
     placesDetailsParams.append('key', googleAPIToken)
     const detailsRequestUrl = `${placesDetailsBaseUrl}?${placesDetailsParams.toString()}`
 

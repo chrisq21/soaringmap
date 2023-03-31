@@ -29,6 +29,7 @@ export default function Home({gliderportData}) {
       coordinates: fields.coordinates,
       state: fields.state,
       city: fields.city,
+      website: fields.website,
     }
   })
 
@@ -66,8 +67,18 @@ export default function Home({gliderportData}) {
           <div>
             {selectedGliderport && (
               <Details
+                key={selectedGliderport.title}
                 details={selectedGliderport}
-                handleClick={() => setSelectedGliderport(null)}
+                handleBackClick={() => {
+                  if (!map.current.getStyle().name.toLowerCase().includes('outdoors')) {
+                    map.current.setStyle('mapbox://styles/mapbox/outdoors-v9')
+                  }
+                  setSelectedGliderport(null)
+                  map.current.flyTo({
+                    zoom: 4,
+                    duration: 0,
+                  })
+                }}
                 handleImageClick={() => {
                   if (!map.current.getStyle().name.toLowerCase().includes('satellite')) {
                     map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')

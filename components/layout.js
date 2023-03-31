@@ -17,7 +17,6 @@ export default function Layout({children}) {
         <span>Soaring POI</span>
       </header>
       <main className={styles.main}>{children}</main>
-      <footer>Footer</footer>
     </div>
   )
 }

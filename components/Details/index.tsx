@@ -11,18 +11,21 @@ type AdditionalDetails = {
   photos: any
 }
 
-export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; handleClick: () => void; handleImageClick: () => void}) => {
+export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: () => void}) => {
   const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
-  const {formatted_address, website, formatted_phone_number} = additionalDetails || {}
-  const {title, coordinates, state, city} = details
+  const [seeMorePhotos, setSeeMorePhotos] = useState<boolean>(false)
+  const {title, coordinates, state, city, website} = details
 
   const satelliteImageWidth = 400
   const satelliteImageHeight = 300
   const satelliteZoom = 15
   const accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA' // TODO move
+  const googleAPIToken = 'AIzaSyDLO2h-SjND5NUMebJC9Bb9GIzr9f4s0JQ' // TODO move
   const staticMapUrl = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${details.coordinates
     .toString()
     .trim()},${satelliteZoom}/${satelliteImageWidth}x${satelliteImageHeight}?access_token=${accessToken}`
+
+  const photosBaseUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=${googleAPIToken}`
 
   useEffect(() => {
     const fetchDetails = async () => {
@@ -45,7 +48,7 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
           console.error('No data found')
           return
         }
-
+        console.log(data.photos)
         setAdditionalDetails(data)
       } catch (error) {
         console.error(error)
@@ -58,9 +61,9 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
   return (
     <div className={styles.container}>
       <div>
-        <button onClick={handleClick} className={styles.backBtn}>
-          Back home
-        </button>
+        <a onClick={handleBackClick} className={styles.link}>
+          {'< Back to list'}
+        </a>
       </div>
       <div className={styles.headerContainer}>
         <div className={styles.headerTextContainer}>
@@ -68,11 +71,14 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
           <span className={styles.subtext}>
             {city}, {state}
           </span>
+          <a className={styles.link} href={website} target={'_blank'}>
+            {website}
+          </a>
         </div>
       </div>
       {/* Satellite Image */}
       <div className={styles.sectionsContainer}>
-        <img className={styles.satelliteImage} src={staticMapUrl} alt="Gliderport" />
+        <img className={styles.image} src={staticMapUrl} alt="Gliderport" />
         <div className={styles.satelliteContainer}>
           <span>Satellite image</span>
           <span onClick={handleImageClick} className={styles.link}>
@@ -82,14 +88,28 @@ export default ({details, handleClick, handleImageClick}: {details: GLIDERPORT; 
       </div>
       {additionalDetails && (
         <div className={styles.sectionsContainer}>
-          <div className={styles.section}>
-            <h2 className={styles.sectionTitle}>Contact Information</h2>
-            <a className={styles.link} href={website} target="_blank">
-              {website}
-            </a>
-            <p className={styles.sectionText}>{formatted_phone_number}</p>
-            <p className={styles.sectionText}>{formatted_address}</p>
-          </div>
+          {/* Photos section */}
+          {additionalDetails?.photos && (
+            <div className={styles.section}>
+              <div>
+                <h2 className={styles.sectionTitle}>Photo(s)</h2>
+              </div>
+              {additionalDetails.photos.map((photo, index) => {
+                if (!seeMorePhotos && index !== 0) return
+                return <img className={styles.image} src={`${photosBaseUrl}&photo_reference=${photo.photo_reference}`} alt="Gliderport photo" key={index} />
+              })}
+              {additionalDetails.photos.length > 1 && !seeMorePhotos && (
+                <button
+                  onClick={() => {
+                    setSeeMorePhotos(true)
+                  }}
+                >
+                  See more photos
+                </button>
+              )}
+              <span className={styles.subtext}>source: Google maps API</span>
+            </div>
+          )}
         </div>
       )}
     </div>
