@@ -92,7 +92,7 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
           {additionalDetails?.photos && (
             <div className={styles.section}>
               <div>
-                <h2 className={styles.sectionTitle}>Photo(s)</h2>
+                <h2 className={styles.sectionTitle}>Photos</h2>
                 <span className={styles.subtext}>source: Google maps</span>
               </div>
               {additionalDetails.photos.map((photo, index) => {

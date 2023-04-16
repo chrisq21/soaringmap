@@ -95,7 +95,25 @@ export const addGliderportMarkers = (map) => {
       filter: ['!', ['has', 'point_count']], // fliter out clusters
       layout: {
         'icon-image': 'glider-icon', // reference the image
-        'icon-size': 0.08,
+        'icon-size': 0.07,
+      },
+    })
+
+    map.addLayer({
+      id: 'gliderport-text',
+      type: 'symbol',
+      source: 'gliderports-source',
+      filter: ['!', ['has', 'point_count']], // fliter out clusters
+      layout: {
+        'text-field': ['get', 'title'], // replace 'name' with the name of the property containing the text to display
+        'text-font': ['Montserrat Regular'], // set the font for the text
+        'text-size': 9, // set the size for the text
+        'text-offset': [0, 2],
+        'text-anchor': 'top', // set the text anchor to the top of the icon
+        'text-allow-overlap': false, // allow text to overlap with other symbols
+      },
+      paint: {
+        'text-color': '#000000', // set the color for the text
       },
     })
   })

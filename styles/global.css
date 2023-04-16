@@ -55,3 +55,7 @@ button {
   --header-height: 75px;
   --global-padding: 32px;
 }
+
+.mapboxgl-popup.mapboxgl-popup-anchor-bottom {
+  max-width: none !important;
+}
