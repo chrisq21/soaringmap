@@ -1,6 +1,5 @@
 
 .container {
-  padding: 24px;
   padding-top: 0;
 }
 
@@ -13,8 +12,10 @@
   all: unset;
   cursor: pointer;
   display: block;
-
-  margin: 10px 0;
+  font-weight: bold;
+  margin: 0;
+  text-decoration: underline;
+  
 }
 
 

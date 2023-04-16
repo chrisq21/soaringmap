@@ -71,9 +71,11 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
           <span className={styles.subtext}>
             {city}, {state}
           </span>
-          <a className={styles.link} href={website} target={'_blank'}>
-            {website}
-          </a>
+          {website && (
+            <a className={styles.link} href={website} target={'_blank'}>
+              Go to website
+            </a>
+          )}
         </div>
       </div>
       {/* Satellite Image */}

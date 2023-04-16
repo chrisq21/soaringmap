@@ -1,4 +1,5 @@
 import styles from './List.module.css'
+import Accordion from 'react-bootstrap/Accordion'
 
 export default ({items, map, handleClick}) => {
   function groupObjectsByState(objects) {
@@ -23,27 +24,31 @@ export default ({items, map, handleClick}) => {
 
   return (
     <div className={styles.container}>
-      {itemsByState.map((group, index) => (
-        <div key={index}>
-          <span className={styles.category}>{group.state}</span>
-          {group.items.map((item, index) => (
-            <button
-              key={index}
-              className={styles.itemTitle}
-              onClick={() => {
-                const currentZoom = map.current.getZoom()
-                handleClick(item)
-                map.current.easeTo({
-                  center: item.coordinates,
-                  zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
-                })
-              }}
-            >
-              {item.title}
-            </button>
-          ))}
-        </div>
-      ))}
+      <Accordion>
+        {itemsByState.map((group, index) => (
+          <Accordion.Item eventKey={String(index)} key={index}>
+            <Accordion.Header className={styles.category}>{group.state}</Accordion.Header>
+            {group.items.map((item, index) => (
+              <Accordion.Body>
+                <button
+                  key={index}
+                  className={styles.itemTitle}
+                  onClick={() => {
+                    const currentZoom = map.current.getZoom()
+                    handleClick(item)
+                    map.current.easeTo({
+                      center: item.coordinates,
+                      zoom: currentZoom < 5.3 ? 5.3 : currentZoom,
+                    })
+                  }}
+                >
+                  {item.title}
+                </button>
+              </Accordion.Body>
+            ))}
+          </Accordion.Item>
+        ))}
+      </Accordion>
     </div>
   )
 }
