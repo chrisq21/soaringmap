@@ -13,7 +13,7 @@ type AdditionalDetails = {
 
 export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: () => void}) => {
   const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
-  const [seeMorePhotos, setSeeMorePhotos] = useState<boolean>(false)
+  const [seePhotosClicked, setSeePhotosClicked] = useState<boolean>(false)
   const {title, coordinates, state, city, website} = details
 
   const satelliteImageWidth = 400
@@ -27,41 +27,38 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
 
   const photosBaseUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=${googleAPIToken}`
 
-  useEffect(() => {
-    const fetchDetails = async () => {
-      const detailsData = {
-        title,
-        coordinates,
-      }
-
-      try {
-        const res = await fetch('/api/fetchDetails', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(detailsData),
-        })
-        const data = await res.json()
-
-        if (!data) {
-          console.error('No data found')
-          return
-        }
-        console.log(data.photos)
-        setAdditionalDetails(data)
-      } catch (error) {
-        console.error(error)
-      }
+  const fetchDetails = async () => {
+    const detailsData = {
+      title,
+      coordinates,
     }
 
-    fetchDetails()
-  }, [title])
+    try {
+      const res = await fetch('/api/fetchDetails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(detailsData),
+      })
+      const data = await res.json()
+
+      if (!data) {
+        console.error('No data found')
+        return
+      }
+      console.log(data)
+      setAdditionalDetails(data)
+      setSeePhotosClicked(true)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
     <div className={styles.container}>
       <div>
-        <a onClick={handleBackClick} className={styles.link}>
+        <a onClick={handleBackClick} className={`${styles.link} ${styles.backBtn}`}>
           {'< Back to list'}
         </a>
       </div>
@@ -73,7 +70,13 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
           </span>
           {website && (
             <a className={styles.link} href={website} target={'_blank'}>
-              Go to website
+              Website url
+            </a>
+          )}
+          {/* TODO add SSA url */}
+          {true && (
+            <a className={styles.link} href={website} target={'_blank'}>
+              SSA chapter url
             </a>
           )}
         </div>
@@ -88,6 +91,7 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
           </span>
         </div>
       </div>
+      {!seePhotosClicked && <button onClick={fetchDetails}>See photos</button>}
       {additionalDetails && (
         <div className={styles.sectionsContainer}>
           {/* Photos section */}
@@ -97,23 +101,16 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
                 <h2 className={styles.sectionTitle}>Photos</h2>
                 <span className={styles.subtext}>source: Google maps</span>
               </div>
-              {additionalDetails.photos.map((photo, index) => {
-                if (!seeMorePhotos && index !== 0) return
-                return <img className={styles.image} src={`${photosBaseUrl}&photo_reference=${photo.photo_reference}`} alt="Gliderport photo" key={index} />
-              })}
-              {additionalDetails.photos.length > 1 && !seeMorePhotos && (
-                <button
-                  onClick={() => {
-                    setSeeMorePhotos(true)
-                  }}
-                >
-                  See more photos
-                </button>
-              )}
+              {additionalDetails.photos.length > 0 &&
+                additionalDetails.photos.map((photo, index) => {
+                  return <img className={styles.image} src={`${photosBaseUrl}&photo_reference=${photo.photo_reference}`} alt="Gliderport photo" key={index} />
+                })}
             </div>
           )}
         </div>
       )}
+
+      {seePhotosClicked && (!additionalDetails || !additionalDetails.photos || !additionalDetails.photos.length) && <span>No photos found on Google Maps</span>}
     </div>
   )
 }

@@ -45,6 +45,8 @@ export default function Home({gliderportData}) {
       addBaseMapStyles(map.current)
       addGliderportsToMap(map.current, allGliderports, setSelectedGliderport)
     })
+
+    console.log(gliderportData)
   }, [])
 
   useEffect(() => {
