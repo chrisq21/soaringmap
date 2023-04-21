@@ -1,4 +1,4 @@
-import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from 'mapbox-gl'
 import {GLIDERPORT} from '../../types/gliderport'
 let popup
 
@@ -20,13 +20,12 @@ export default (map, gliderports: GLIDERPORT[], setSelectedGliderportTitle) => {
 
 export const getGliderportFeatures = (gliderportData) => {
   /* Create gliderport feature data */
-  const features = gliderportData.map(({title, description, category, coordinates}, index) => {
+  const features = gliderportData.map(({title, coordinates}, index) => {
     let geometryData = {}
 
     const featureData = {
       type: 'Feature',
       properties: {
-        description,
         icon: 'airfield',
         title: title,
         id: index,
@@ -58,7 +57,7 @@ export const addGliderportSource = (map, features) => {
     },
     cluster: true,
     clusterMaxZoom: 14, // Max zoom to cluster points on
-    clusterRadius: 30, // Radius of each cluster when clustering points (defaults to 50)
+    clusterRadius: 40, // Radius of each cluster when clustering points (defaults to 50)
   })
   return map
 }

@@ -1,12 +1,10 @@
 import Head from 'next/head'
 import Layout, {siteTitle} from '../components/layout'
 import styles from '../styles/homepage.module.css'
-import {getSortedPostsData} from '../lib/posts'
 import {useEffect, useRef, useState} from 'react'
-import mockGliderports from '../lib/data/gliderports'
 
 import 'mapbox-gl/dist/mapbox-gl.css'
-import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from 'mapbox-gl'
 import {GLIDERPORT} from '../types/gliderport'
 import {addBaseMapStyles, configureMap} from '../lib/utils/mapSetup'
 import addGliderportsToMap, {showActiveGliderportPopup} from '../lib/utils/addGliderportsToMap'
@@ -19,7 +17,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc
 export default function Home({gliderportData}) {
   const mapContainer = useRef(null)
   const map = useRef(null)
-  const [zoom, setZoom] = useState(4)
+  const [zoom, setZoom] = useState(3.5)
   const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
   const [isDefaultMap, setIsDefaultMap] = useState<boolean | null>(null)
 
@@ -31,6 +29,7 @@ export default function Home({gliderportData}) {
       state: fields.state,
       city: fields.city,
       website: fields.website,
+      ssaUrl: fields.ssaUrl,
     }
   })
 
@@ -45,8 +44,6 @@ export default function Home({gliderportData}) {
       addBaseMapStyles(map.current)
       addGliderportsToMap(map.current, allGliderports, setSelectedGliderport)
     })
-
-    console.log(gliderportData)
   }, [])
 
   useEffect(() => {
@@ -67,10 +64,8 @@ export default function Home({gliderportData}) {
     if (isDefaultMap && map.current.getStyle().name.toLowerCase().includes('satellite')) {
       map.current.setStyle('mapbox://styles/mapbox/outdoors-v9')
     } else if (!isDefaultMap && map.current.getStyle().name.toLowerCase().includes('outdoors')) {
-      map.current.setStyle('mapbox://styles/mapbox/satellite-streets-v11')
+      map.current.setStyle('mapbox://styles/chrisq21/clgmgjkp9000w01qo2hvrh3b4')
     }
-
-    console.log('isDefaultMap', isDefaultMap)
   }, [isDefaultMap])
 
   return (

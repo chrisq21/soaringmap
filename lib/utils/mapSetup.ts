@@ -1,14 +1,14 @@
-import mapboxgl from '!mapbox-gl' // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from 'mapbox-gl'
 
 export const configureMap = (map, mapContainer, zoom) => {
   const mapInstance = new mapboxgl.Map({
-    projection: 'mercator',
     container: mapContainer,
     style: 'mapbox://styles/mapbox/outdoors-v9',
-    center: [-77.3513761, 39.75704], // TODO determine default
+    center: [-94.95494901349059, 38.809949873101374], // Kansas
     zoom: zoom,
   })
   mapInstance.addControl(new mapboxgl.NavigationControl())
+  mapInstance.setProjection('mercator')
   return mapInstance
 }
 

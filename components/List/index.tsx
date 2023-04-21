@@ -29,7 +29,7 @@ export default ({items, map, handleClick}) => {
           <Accordion.Item eventKey={String(index)} key={index}>
             <Accordion.Header className={styles.category}>{group.state}</Accordion.Header>
             {group.items.map((item, index) => (
-              <Accordion.Body>
+              <Accordion.Body key={index}>
                 <button
                   key={index}
                   className={styles.itemTitle}

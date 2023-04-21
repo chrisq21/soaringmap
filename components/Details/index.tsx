@@ -14,7 +14,7 @@ type AdditionalDetails = {
 export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: () => void}) => {
   const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
   const [seePhotosClicked, setSeePhotosClicked] = useState<boolean>(false)
-  const {title, coordinates, state, city, website} = details
+  const {title, coordinates, state, city, website, ssaUrl} = details
 
   const satelliteImageWidth = 400
   const satelliteImageHeight = 300
@@ -68,30 +68,36 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
           <span className={styles.subtext}>
             {city}, {state}
           </span>
-          {website && (
-            <a className={styles.link} href={website} target={'_blank'}>
-              Website url
-            </a>
-          )}
-          {/* TODO add SSA url */}
-          {true && (
-            <a className={styles.link} href={website} target={'_blank'}>
-              SSA chapter url
-            </a>
-          )}
         </div>
       </div>
       {/* Satellite Image */}
       <div className={styles.sectionsContainer}>
+        <span>Runway</span>
         <img className={`${styles.image} ${styles.link}`} src={staticMapUrl} alt="Gliderport" onClick={handleImageClick} />
         <div className={styles.satelliteContainer}>
-          <span>Satellite image</span>
           <span onClick={handleImageClick} className={styles.link}>
-            (see on map)
+            see on map
           </span>
         </div>
       </div>
-      {!seePhotosClicked && <button onClick={fetchDetails}>See photos</button>}
+      {/* Links & Info */}
+      {website && (
+        <a className={styles.link} href={website} target={'_blank'}>
+          Website link
+        </a>
+      )}
+      {ssaUrl && (
+        <a className={styles.link} href={ssaUrl} target={'_blank'}>
+          SSA chapter link
+        </a>
+      )}
+      {!seePhotosClicked && (
+        <>
+          <button onClick={fetchDetails}>Load photos</button>
+          <p>source: Google</p>
+        </>
+      )}
+      {/* Google photos */}
       {additionalDetails && (
         <div className={styles.sectionsContainer}>
           {/* Photos section */}
@@ -99,7 +105,7 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
             <div className={styles.section}>
               <div>
                 <h2 className={styles.sectionTitle}>Photos</h2>
-                <span className={styles.subtext}>source: Google maps</span>
+                <span className={styles.subtext}>source: Google</span>
               </div>
               {additionalDetails.photos.length > 0 &&
                 additionalDetails.photos.map((photo, index) => {
