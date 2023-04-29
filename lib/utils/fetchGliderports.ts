@@ -2,8 +2,8 @@ const space = process.env.CONTENTFUL_SPACE_ID
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN
 
 const client = require('contentful').createClient({
-  space: 'g60vi85ul7q0', // fix
-  accessToken: '1-u_ufbGtIp2NH_iVwXOze_hzOH4Qp3qeqWmv-Zm3Ro', // fix
+  space,
+  accessToken,
 })
 
 export async function fetchGliderports() {

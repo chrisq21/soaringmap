@@ -1,3 +1,10 @@
+/* CSS Variables */
+:root {
+  --header-height: 75px;
+  --global-padding: 32px;
+  --color-primary: #355C7D;
+}
+
 html,
 body {
   padding: 0;
@@ -5,16 +12,16 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   line-height: 1.6;
   font-size: 18px;
-  color: #1C4747;
+  color: var(--color-primary);
 }
 
 a {
-  color: #1C4747 !important;
+  color: var(--color-primary) !important;
 }
 
 * {
   box-sizing: border-box;
-  color: #1C4747;
+  color: var(--color-primary);
 }
 
 
@@ -34,11 +41,11 @@ img {
 }
 
 .mapboxgl-popup-close-button {
-  color: #1C4747;
+  color: var(--color-primary);
 }
 
 button {
-  background: #1C4747;
+  background: var(--color-primary);
   color: #fff;
   border: none;
   border-radius: 4px !important;
@@ -54,11 +61,7 @@ button {
 }
 
 
-/* CSS Variables */
-:root {
-  --header-height: 75px;
-  --global-padding: 32px;
-}
+
 
 .mapboxgl-popup.mapboxgl-popup-anchor-bottom {
   max-width: none !important;

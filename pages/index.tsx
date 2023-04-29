@@ -11,8 +11,8 @@ import addGliderportsToMap, {showActiveGliderportPopup} from '../lib/utils/addGl
 import List from '../components/List'
 import Details from '../components/Details'
 import {fetchGliderports} from '../lib/utils/fetchGliderports'
-// TODO move to env file
-mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNxMjEiLCJhIjoiY2wyZTB5bmFqMTNuYjNjbGFnc3RyN25rbiJ9.4CAHYC8Sic49gsnwuP_fmA'
+
+mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN
 
 export default function Home({gliderportData}) {
   const mapContainer = useRef(null)
@@ -29,7 +29,7 @@ export default function Home({gliderportData}) {
       state: fields.state,
       city: fields.city,
       website: fields.website,
-      ssaUrl: fields.ssaUrl,
+      ssaUrl: fields?.ssaUrl,
     }
   })
 
