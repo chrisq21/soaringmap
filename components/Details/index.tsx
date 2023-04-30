@@ -4,6 +4,7 @@ import styles from './Details.module.css'
 import {BsLink45Deg} from 'react-icons/bs'
 import {BiArrowBack} from 'react-icons/bi'
 import {FaMapMarkerAlt} from 'react-icons/fa'
+import {MdAirplanemodeActive} from 'react-icons/md'
 
 type AdditionalDetails = {
   formatted_phone_number: string
@@ -38,7 +39,7 @@ const getStaticMapUrl = (coordinates: string, imageType: DetailImageType) => {
 export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: () => void}) => {
   const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
   const [seePhotosClicked, setSeePhotosClicked] = useState<boolean>(false)
-  const {title, coordinates, state, city, website, ssaUrl} = details
+  const {title, coordinates, state, city, website, ssaUrl, airportID} = details
 
   const [imageType, setImageType] = useState<DetailImageType>(DetailImageType.AIRPORT)
 
@@ -143,6 +144,11 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
               <a className={styles.link} href={ssaUrl} target={'_blank'}>
                 SSA chapter
               </a>
+            </div>
+          )}
+          {airportID && (
+            <div className={styles.resource}>
+              <MdAirplanemodeActive /> <span>Airport identifier: {airportID}</span>
             </div>
           )}
         </div>

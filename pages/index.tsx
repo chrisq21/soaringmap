@@ -30,6 +30,7 @@ export default function Home({gliderportData}) {
       city: fields.city,
       website: fields.website,
       ssaUrl: fields?.ssaUrl,
+      airportID: fields?.airportID,
     }
   })
 
