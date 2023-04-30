@@ -1,4 +1,4 @@
-const googleAPIToken = 'AIzaSyDLO2h-SjND5NUMebJC9Bb9GIzr9f4s0JQ'
+const googleAPIToken = process.env.NEXT_PUBLIC_GOOGLE_PLACES_TOKEN
 const placesSearchBaseUrl = 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json'
 const placesDetailsBaseUrl = 'https://maps.googleapis.com/maps/api/place/details/json'
 
