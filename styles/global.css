@@ -1,9 +1,17 @@
 /* CSS Variables */
 :root {
+  /* Header */
   --header-height: 75px;
+
+  /* Padding */
   --global-padding: 32px;
+
+  /* Color */
   --color-primary: #355C7D;
   --color-primary-hover: rgb(53, 92, 125, 0.8);
+
+  /* Breakpoints */
+  --breakpoint-mobile: 768px;
 }
 
 html,

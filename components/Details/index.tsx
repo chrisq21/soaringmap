@@ -2,7 +2,7 @@ import {useEffect, useState} from 'react'
 import {GLIDERPORT} from '../../types/gliderport'
 import styles from './Details.module.css'
 import {BsLink45Deg} from 'react-icons/bs'
-
+import {BiArrowBack} from 'react-icons/bi'
 import {FaMapMarkerAlt} from 'react-icons/fa'
 
 type AdditionalDetails = {
@@ -79,7 +79,8 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
     <>
       <div className={styles.backContainer}>
         <a onClick={handleBackClick} className={`${styles.link} ${styles.backBtn}`}>
-          {'< Back to list'}
+          <BiArrowBack />
+          {' Back'}
         </a>
       </div>
       <div className={styles.container}>

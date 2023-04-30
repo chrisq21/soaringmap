@@ -82,10 +82,6 @@ export default function Home({gliderportData}) {
               details={selectedGliderport}
               handleBackClick={() => {
                 setSelectedGliderport(null)
-                map.current.flyTo({
-                  zoom: 4,
-                  duration: 0,
-                })
               }}
               handleImageClick={() => {
                 // clicked satellite image
