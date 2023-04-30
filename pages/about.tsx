@@ -14,7 +14,8 @@ export default function Home({gliderportData}) {
           <p>
             Our goal with this website is to provide users with easy access to information about glider operations, both commercial and club-based, around the
             world. Although we're currently in the early stages of development, we're starting with glider operations in the United States. We look forward to
-            expanding our coverage as we continue to make progress on this project.
+            expanding our coverage as we continue to make progress on this project. We'll have lots of updates and opportunities for gathering feedback from the
+            soaring community shortly.
           </p>
         </div>
       </section>

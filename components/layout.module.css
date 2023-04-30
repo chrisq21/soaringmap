@@ -13,9 +13,22 @@
 
 .header {
   /* TODO use css variable since this is shared */
-  padding-left: var(--global-padding);
+  padding: 0 var(--global-padding);
   height: var(--header-height);
   background: white;
+  display: flex;
+  align-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header a {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.innerHeader {
   display: flex;
   align-items: center;
   display: flex;

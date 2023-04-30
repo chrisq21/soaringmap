@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import {FaMap} from 'react-icons/fa'
 import styles from './layout.module.css'
+import Link from 'next/link'
 
 export const siteTitle = 'Soaring Map'
 
@@ -14,8 +15,11 @@ export default function Layout({children}) {
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <header className={styles.header}>
-        <FaMap />
-        <span>Soaring Map</span>
+        <div className={styles.innerHeader}>
+          <FaMap />
+          <Link href={'/'}>Soaring Map</Link>
+        </div>
+        <Link href={'/about'}>About</Link>
       </header>
       <main className={styles.main}>{children}</main>
     </div>
