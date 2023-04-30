@@ -64,7 +64,7 @@
 
 .mapStyleSwitcher {
   position: absolute;
-  top: 10px;
+  top: 20px;
   right: 50%;
   transform: translateX(50%);
   z-index: 1;
@@ -73,7 +73,7 @@
   align-items: center;
   border-radius: 4px;
   box-shadow: 0 0 0 2px rgba(0,0,0,.1);
-  padding: 4px;
+  padding: 8px 16px;
   gap: 4px;
 }
 
@@ -81,7 +81,17 @@
   display: flex;
   cursor: pointer;
   gap: 4px;
+  font-size: 16px;
 }
+
+.mapStyleSwitcher span {
+  display: flex;
+  cursor: pointer;
+  gap: 4px;
+  font-size: 16px;
+}
+
+
 
 .mapStyleSwitcher input {
   cursor: pointer;

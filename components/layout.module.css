@@ -37,6 +37,15 @@
   gap: 8px;
 }
 
+.rightLinks {
+  display: flex;
+  align-items: center;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  gap: 8px;
+}
+
 .backToHome {
   margin: 3rem 0 0;
 }

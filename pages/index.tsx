@@ -21,6 +21,8 @@ export default function Home({gliderportData}) {
   const [selectedGliderport, setSelectedGliderport] = useState<GLIDERPORT>(null)
   const [isDefaultMap, setIsDefaultMap] = useState<boolean | null>(null)
 
+  console.log('isDefaultMap here', isDefaultMap)
+
   const allGliderports: GLIDERPORT[] = gliderportData.map((gliderport) => {
     const {fields} = gliderport
     return {
