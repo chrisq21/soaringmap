@@ -84,7 +84,10 @@ export default function Home({gliderportData}) {
                 setSelectedGliderport(null)
               }}
               handleImageClick={() => {
-                // clicked satellite image
+                // on mobile, remove detail view on click
+                if (window.innerWidth <= 768) {
+                  setSelectedGliderport(null)
+                }
                 setIsDefaultMap(false)
                 map.current.flyTo({
                   center: selectedGliderport.coordinates,
