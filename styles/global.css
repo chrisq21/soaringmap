@@ -3,6 +3,7 @@
   --header-height: 75px;
   --global-padding: 32px;
   --color-primary: #355C7D;
+  --color-primary-hover: rgb(53, 92, 125, 0.8);
 }
 
 html,
@@ -17,6 +18,11 @@ body {
 
 a {
   color: var(--color-primary) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--color-primary-hover) !important;
 }
 
 * {

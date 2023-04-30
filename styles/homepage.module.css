@@ -25,7 +25,21 @@
   color: gray;
   display: block;
   margin-top: 30px;
+}
 
+.about {
+  margin-top: 30px;
+  font-size: 12px;
+  color: gray;
+}
+
+.aboutTitle {
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.innerContainerAbout {
+  padding: 16px 20%;
 }
 
 .poiTitle {

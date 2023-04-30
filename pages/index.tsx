@@ -75,40 +75,38 @@ export default function Home({gliderportData}) {
       </Head>
       <section className={styles.container}>
         {/* Sidebar */}
-        <div className={styles.sidebar}>
-          <div>
-            {selectedGliderport && (
-              <Details
-                key={selectedGliderport.title}
-                details={selectedGliderport}
-                handleBackClick={() => {
-                  setSelectedGliderport(null)
-                  map.current.flyTo({
-                    zoom: 4,
-                    duration: 0,
-                  })
-                }}
-                handleImageClick={() => {
-                  // clicked satellite image
-                  setIsDefaultMap(false)
-                  map.current.flyTo({
-                    center: selectedGliderport.coordinates,
-                    zoom: 14,
-                    duration: 0,
-                  })
-                }}
-              />
-            )}
-            {!selectedGliderport && (
-              <List
-                items={allGliderports}
-                map={map}
-                handleClick={(e) => {
-                  setSelectedGliderport(e)
-                }}
-              />
-            )}
-          </div>
+        <div>
+          {selectedGliderport && (
+            <Details
+              key={selectedGliderport.title}
+              details={selectedGliderport}
+              handleBackClick={() => {
+                setSelectedGliderport(null)
+                map.current.flyTo({
+                  zoom: 4,
+                  duration: 0,
+                })
+              }}
+              handleImageClick={() => {
+                // clicked satellite image
+                setIsDefaultMap(false)
+                map.current.flyTo({
+                  center: selectedGliderport.coordinates,
+                  zoom: 14,
+                  duration: 0,
+                })
+              }}
+            />
+          )}
+          {!selectedGliderport && (
+            <List
+              items={allGliderports}
+              map={map}
+              handleClick={(e) => {
+                setSelectedGliderport(e)
+              }}
+            />
+          )}
         </div>
         {/* Map */}
         <div ref={mapContainer} className={styles.mapContainer}>

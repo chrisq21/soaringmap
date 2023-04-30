@@ -112,7 +112,7 @@ export const addGliderportMarkers = (map) => {
         'text-allow-overlap': false, // allow text to overlap with other symbols
       },
       paint: {
-        'text-color': '#ffffff', // set the color for the text
+        'text-color': '#000000', // set the color for the text
       },
     })
   })

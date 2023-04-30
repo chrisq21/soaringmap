@@ -1,6 +1,9 @@
 import {useEffect, useState} from 'react'
 import {GLIDERPORT} from '../../types/gliderport'
 import styles from './Details.module.css'
+import {BsLink45Deg} from 'react-icons/bs'
+
+import {FaMapMarkerAlt} from 'react-icons/fa'
 
 type AdditionalDetails = {
   formatted_phone_number: string
@@ -28,8 +31,6 @@ const getStaticMapUrl = (coordinates: string, imageType: DetailImageType) => {
   } else if (imageType === DetailImageType.AIRPORT) {
     zoom = 15
   }
-
-  console.log('zoom: ', zoom)
 
   return `${baseURL},${zoom}/${imageWidth}x${imageHeight}?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`
 }
@@ -115,28 +116,41 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
               <span className={styles.overlayLink}>See on map</span>
             </div>
           </div>
-
           <div className={styles.satelliteContainer}></div>
         </div>
         {/* Links & Info */}
         <div className={styles.section}>
-          {website && (
-            <a className={styles.link} href={website} target={'_blank'}>
-              Website link
+          <h2 className={styles.sectionTitle}>General Information</h2>
+          {/* http://www.google.com/maps/place/49.46800006494457,17.11514008755796 */}
+          <div className={styles.resource}>
+            <FaMapMarkerAlt />{' '}
+            <a className={styles.link} href={`http://www.google.com/maps/place/${coordinates[1]},${coordinates[0]}`} target={'_blank'}>
+              Google maps
             </a>
+          </div>
+          {website && (
+            <div className={styles.resource}>
+              <BsLink45Deg />{' '}
+              <a className={styles.link} href={website} target={'_blank'}>
+                Website
+              </a>
+            </div>
           )}
           {ssaUrl && (
-            <a className={styles.link} href={ssaUrl} target={'_blank'}>
-              SSA chapter link
-            </a>
+            <div className={styles.resource}>
+              <BsLink45Deg />{' '}
+              <a className={styles.link} href={ssaUrl} target={'_blank'}>
+                SSA chapter
+              </a>
+            </div>
           )}
         </div>
 
         <div className={styles.section}>
+          <h2 className={styles.sectionTitle}>Google Photos</h2>
           {!seePhotosClicked && <button onClick={fetchDetails}>Load Google photos</button>}
           {seePhotosClicked && (
             <>
-              <h2 className={styles.sectionTitle}>Google Photos</h2>
               {additionalDetails?.photos?.length > 0 &&
                 additionalDetails.photos.map((photo, index) => (
                   <img className={styles.image} src={`${photosBaseUrl}&photo_reference=${photo.photo_reference}`} alt="Gliderport photo" key={index} />
