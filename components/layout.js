@@ -19,7 +19,7 @@ export default function Layout({children}) {
           <FaMap />
           <Link href={'/'}>Soaring Map</Link>
         </div>
-        <span>Explore Glider Clubs and Commercial Operations</span>
+        <span>Explore Soaring Communities</span>
         <div className={styles.rightLinks}>
           <Link href={'/about'}>About</Link>
           <Link href={'mailto:chris@soaringmap.com'}>Contact</Link>
