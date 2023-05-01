@@ -84,7 +84,7 @@ export default function Home({gliderportData}) {
               handleBackClick={() => {
                 setSelectedGliderport(null)
               }}
-              handleImageClick={() => {
+              handleImageClick={(zoom: number) => {
                 // on mobile, remove detail view on click
                 if (window.innerWidth <= 768) {
                   setSelectedGliderport(null)
@@ -92,7 +92,7 @@ export default function Home({gliderportData}) {
                 setIsDefaultMap(false)
                 map.current.flyTo({
                   center: selectedGliderport.coordinates,
-                  zoom: 14,
+                  zoom,
                   duration: 0,
                 })
               }}

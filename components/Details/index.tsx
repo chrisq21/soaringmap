@@ -18,14 +18,22 @@ type AdditionalDetails = {
 enum DetailImageType {
   SURROUNDING_AREA = 'Surrounding area',
   AIRPORT = 'Airport',
-  THREED = '3d',
+  SECTIONAL = 'Sectional',
 }
 
-const getStaticMapUrl = (coordinates: string, imageType: DetailImageType) => {
-  const baseURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${coordinates}`
+const getStaticMapUrl = (coordinates: Array<number>, imageType: DetailImageType) => {
+  const coordinatesTrimmed = coordinates.toString().trim()
+
+  const baseURL = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${coordinatesTrimmed}`
+  const sectionUrl = `https://vfrmap.com/api?req=map&type=sectc&lat=${coordinates[1]}&lon=${coordinates[0]}&zoom=10&width=400&height=300`
+
   const imageWidth = 400
   const imageHeight = 300
   let zoom = 15
+
+  if (imageType === DetailImageType.SECTIONAL) {
+    return sectionUrl
+  }
 
   if (imageType === DetailImageType.SURROUNDING_AREA) {
     zoom = 10
@@ -36,7 +44,7 @@ const getStaticMapUrl = (coordinates: string, imageType: DetailImageType) => {
   return `${baseURL},${zoom}/${imageWidth}x${imageHeight}?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`
 }
 
-export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: () => void}) => {
+export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPORT; handleBackClick: () => void; handleImageClick: (zoom: number) => void}) => {
   const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetails>(null)
   const [seePhotosClicked, setSeePhotosClicked] = useState<boolean>(false)
   const {title, coordinates, state, city, website, ssaUrl, airportID} = details
@@ -44,9 +52,10 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
   const [imageType, setImageType] = useState<DetailImageType>(DetailImageType.AIRPORT)
 
   const googleAPIToken = process.env.NEXT_PUBLIC_GOOGLE_PLACES_TOKEN
-  const staticMapUrl = getStaticMapUrl(coordinates.toString().trim(), imageType)
+  const staticMapUrl = getStaticMapUrl(coordinates, imageType)
 
   const photosBaseUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&key=${googleAPIToken}`
+  const sectionURL = `https://www.vfrmap.com/?type=vfrc&lat=${coordinates[1]}&lon=${coordinates[0]}&zoom=10`
 
   const fetchDetails = async () => {
     const detailsData = {
@@ -109,27 +118,36 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
             >
               {DetailImageType.SURROUNDING_AREA}
             </span>
-            {/* <span onClick={() => setImageType(DetailImageType.THREED)}>3D Terrain</span> */}
+            <span
+              className={`${styles.imageType} ${imageType === DetailImageType.SECTIONAL && styles.activeImageType}`}
+              onClick={() => setImageType(DetailImageType.SECTIONAL)}
+            >
+              {DetailImageType.SECTIONAL}
+            </span>
           </div>
           <div className={styles.imageContainer}>
-            <img className={`${styles.image} ${styles.link}`} src={staticMapUrl} alt="Gliderport" onClick={handleImageClick} />
-
-            <div className={styles.overlay} onClick={handleImageClick}>
-              <span className={styles.overlayLink}>See on map</span>
-            </div>
+            <img className={`${styles.image} ${styles.link}`} src={staticMapUrl} alt="Gliderport" />
+            {/* Link to VFRMap for sectional */}
+            {imageType === DetailImageType.SECTIONAL && <a href={sectionURL} target="_blank" className={styles.overlay} />}
+            {/* Otherwise show the image on the map */}
+            {imageType !== DetailImageType.SECTIONAL && (
+              <div
+                className={styles.overlay}
+                onClick={() => {
+                  const zoom = imageType === DetailImageType.SURROUNDING_AREA ? 10 : 15
+                  handleImageClick(zoom)
+                }}
+              >
+                <span className={styles.overlayLink}>See on map</span>
+              </div>
+            )}
           </div>
           <div className={styles.satelliteContainer}></div>
         </div>
         {/* Links & Info */}
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>General Information</h2>
-          {/* http://www.google.com/maps/place/49.46800006494457,17.11514008755796 */}
-          <div className={styles.resource}>
-            <FaMapMarkerAlt />{' '}
-            <a className={styles.link} href={`http://www.google.com/maps/place/${coordinates[1]},${coordinates[0]}`} target={'_blank'}>
-              Google maps
-            </a>
-          </div>
+
           {website && (
             <div className={styles.resource}>
               <BsLink45Deg />{' '}
@@ -151,6 +169,12 @@ export default ({details, handleBackClick, handleImageClick}: {details: GLIDERPO
               <MdAirplanemodeActive /> <span>Airport identifier: {airportID}</span>
             </div>
           )}
+          <div className={styles.resource}>
+            <FaMapMarkerAlt />{' '}
+            <a className={styles.link} href={`http://www.google.com/maps/place/${coordinates[1]},${coordinates[0]}`} target={'_blank'}>
+              Google maps
+            </a>
+          </div>
         </div>
 
         <div className={styles.section}>
