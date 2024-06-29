@@ -80,3 +80,73 @@ button {
 .mapboxgl-popup.mapboxgl-popup-anchor-bottom {
   max-width: none !important;
 }
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+
+#outer-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+#number-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#dash {
+  font-size: 100px;
+  font-weight: bold;
+}
+
+#number1 {
+  opacity: 0;
+  font-size: 100px;
+  font-weight: bold;
+  animation: fadeIn 1s 1s forwards;
+}
+#number2 {
+  opacity: 0;
+  font-size: 100px;
+  font-weight: bold;
+  animation: fadeIn 1s 2s forwards;
+}
+#number3 {
+  opacity: 0;
+  font-size: 100px;
+  font-weight: bold;
+  animation: fadeIn 1s 3s forwards;
+}
+#number4 {
+  opacity: 0;
+  font-size: 100px;
+  font-weight: bold;
+  animation: fadeIn 1s 4s forwards;
+}
+
+#text-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+#text {
+  opacity: 0;
+  font-size: 32px;
+  font-weight: bold;
+  animation: fadeIn 1s 6s forwards;
+}
